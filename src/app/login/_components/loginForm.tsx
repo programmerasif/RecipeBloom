@@ -118,7 +118,7 @@ export default function LoginForm() {
       <GoogleLoginBtn />
       <div className="flex   justify-center pt-3  gap-2">
         <p>Don&apos;t have account </p>{" "}
-        <Link href={"/signup"}>
+        <Link href={"/sign-up"}>
           <p className="text-blue-500 font-bold hover:underline">SignUp</p>{" "}
         </Link>
       </div>

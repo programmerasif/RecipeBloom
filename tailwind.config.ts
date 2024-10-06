@@ -15,7 +15,6 @@ const config: Config = {
     extend: {
       container: {
         center: true,
-        padding: "1rem",
         screens: {
           lg: "1340px",
           xl: "1340px",
