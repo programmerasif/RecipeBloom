@@ -4,8 +4,8 @@ import "./banner.css";
 import { Button } from "@/components/ui/button";
 const Banner = () => {
   return (
-    <div className="relative  h-[calc(100vh-64px)] overflow-hidden">
-      <div className="flex justify-between items-start h-[80%] w-full ">
+    <div className="relative  h-[calc(82vh-64px)] overflow-hidden">
+      <div className="flex justify-between items-start h-[100%] w-full ">
         <div className="flex justify-start items-center h-[100%] w-1/2">
           <div>
             <h5 className="text-6xl font-bold max-w-[40rem] text-[#1F1F38] leading-snug">
@@ -21,26 +21,28 @@ const Banner = () => {
               Start Now
             </Button>
             <div className="mt-8 flex justify-between items-center max-w-[40rem] text-5xl font-semibold">
-
-     
-            <div className="flex justify-center items-center gap-5">
-              <div>449k <span className="text-sm">Active User</span></div>
+              <div className="flex justify-center items-center gap-5">
+                <div>
+                  449k <span className="text-sm">Active User</span>
+                </div>
+              </div>
+              <div className="flex justify-center items-center gap-5">
+                <div>
+                  4.8 <span className="text-sm">Average rating</span>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-center items-center gap-5">
-            <div>4.8 <span className="text-sm">Average rating</span></div>
-            </div>
-          </div>
           </div>
         </div>
         <div className=" w-1/2  h-[100%]">
           <div className="w-full h-full rounded-3xl bg-gradient-to-r from-[#FFF3DE] to-[#FFE0AB]  text-white flex justify-center items-center clip-triangle relative"></div>
-          <div className="absolute top-0 h-[80%]">
+          <div className="absolute top-[10%] h-[80%]">
             <Image
               src={pan}
               alt="User profile image"
               width={100}
               height={100}
-              className=" w-full h-full object-cover"
+              className=" w-full h-full object-cover "
             />
           </div>
         </div>

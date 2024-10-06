@@ -100,12 +100,20 @@ const Navbar = () => {
                     handleLogout={handleLogout}
                   />
                 ) : (
-                  <Link
+                  <div className="flex justify-center items-center gap-5">
+                    <Link
                     href="/login"
                     className="text-gray-800 dark:text-white hover:text-gray-600 py-2 rounded-md text-sm font-medium"
                   >
                     <Button className="bg-[#F54749] duration-300">Login</Button>
                   </Link>
+                  <Link
+                    href="/sign-up"
+                    className="text-gray-800 dark:text-white hover:text-gray-600 py-2 rounded-md text-sm font-medium"
+                  >
+                    <Button className="bg-[#F54749] duration-300">Register</Button>
+                  </Link>
+                  </div>
                 )}
               </div>
             )}
@@ -130,7 +138,7 @@ const Navbar = () => {
                     </Link>
                     <Link href="/sign-up">
                       <Button className="bg-[#F54749] duration-300  mt-4">
-                        Login
+                        register
                       </Button>
                     </Link>
                   </div>
