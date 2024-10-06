@@ -1,13 +1,10 @@
-
-import HomeNewsSection from "@/components/page components/HomePage/HomeNewsSection";
-import HomePageBanner from "@/components/page components/HomePage/HomePageBanner";
+import HomeNewsSection from "@/components/commonSection/Home/HomeNewsSection";
+import Banner from "@/components/commonSection/Home/Banner";
 export default function Home() {
   return (
     <div className="">
-      <HomePageBanner/>
-<HomeNewsSection/>
-
-
+      <Banner />
+      <HomeNewsSection />
     </div>
   );
 }
