@@ -1,4 +1,3 @@
-import Footer from "@/components/common/Footer";
 import Navbar from "@/components/common/Navbar";
 import { ReactNode } from "react";
 
@@ -7,7 +6,6 @@ const CommonLayout = ({ children }: { children: ReactNode }) => {
     <div className="container mx-auto min-h-screen dark:text-white text-black dark:bg-black">
       <Navbar />
       {children}
-      <Footer />
     </div>
   );
 };
