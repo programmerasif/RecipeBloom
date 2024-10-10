@@ -21,8 +21,8 @@ import React from "react";
 
 const AddProduct = () => {
   return (
-    <div className="mb-8 space-y-4">
-      <div className="flex items-center space-x-4 bg-gray-200 p-2 rounded-md">
+    <div className="mb-8 space-y-4 bg-gray-200 ">
+      <div className="flex items-center space-x-4 p-2 rounded-md">
         <div className="flex-grow">
           <Label htmlFor="search" className="sr-only">
             Search recipes

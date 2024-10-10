@@ -52,8 +52,10 @@ export default function RecipeFeed() {
 
   return (
     <div className="min-h-screen grid grid-cols-2 justify-between relative">
-      <main className="max-w-3xl mx-auto py-6 px-4 sm:px-6 lg:px-8 pt-20 ">
-        <AddProduct />
+      <main className="max-w-[50rem] me-auto py-6   pt-20  border">
+        <div className="sticky top-20 z-50">
+          <AddProduct />
+        </div>
         <div className="grid grid-cols-1 gap-4">
           <InfiniteScroll
             dataLength={items.length}
@@ -168,9 +170,10 @@ export default function RecipeFeed() {
                       <small className="text-xs">asifkham@gmail.com</small>
                     </span>
                   </div>
-                  <div className="bg-gradient-to-r from-cyan-400 to-blue-400 text-white px-2 py-1 rounded-full">Premium</div>
-                  <div className="flex justify-center items-center gap-1">
-                   
+                  <div className="bg-gradient-to-r from-cyan-400 to-blue-400 text-white px-2 py-1 rounded-full">
+                    Premium
+                  </div>
+                  <div className="xl:flex justify-center items-center gap-1 hidden">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
