@@ -16,8 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#FDFDFD]  dark:bg-black">
-        <AppProvider>{children}</AppProvider>
+      <body className="bg-[#ebf5fb]  dark:bg-black">
+        <AppProvider>
+          
+          {children}
+
+        </AppProvider>
       </body>
     </html>
   );

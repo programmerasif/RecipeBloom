@@ -15,6 +15,7 @@ import { navMenu } from "@/app/constant/constant";
 import Loader from "@/app/loader/loader";
 
 const Navbar = () => {
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   type TUser = {
@@ -22,8 +23,16 @@ const Navbar = () => {
     email: string;
     mongoId: string;
   };
+  type TUserInfo = {
+    image?: string;
+    // Add other known properties if needed, like:
+    name?: string;
+    email?: string;
+    [key: string]: any; // Allow additional unknown properties
+  };
+  
   const [user, setUser] = useState<TUser | null>(null);
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState<TUserInfo>({});
   const router = useRouter();
 
   const { data, isLoading } = useGetLoginUserInfoQuery(user?.mongoId);
@@ -62,7 +71,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="container relative z-20 transition-all duration-300 bg-[#fff3de67] px-4 rounded-md">
+    <nav className="container mb-10 z-20 transition-all duration-300 bg-[#b1cee0] px-4 rounded-md fixed">
+      
       <div className="mx-auto w-full">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
@@ -82,7 +92,7 @@ const Navbar = () => {
                 <Link
                   key={menu.id}
                   href={menu.href}
-                  className="text-gray-800 dark:text-white hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+                  className=" text-black hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   {menu.linkText}
                 </Link>
@@ -103,13 +113,13 @@ const Navbar = () => {
                   <div className="flex justify-center items-center gap-5">
                     <Link
                     href="/login"
-                    className="text-gray-800 dark:text-white hover:text-gray-600 py-2 rounded-md text-sm font-medium"
+                    className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
                   >
                     <Button className="bg-[#F54749] duration-300">Login</Button>
                   </Link>
                   <Link
                     href="/sign-up"
-                    className="text-gray-800 dark:text-white hover:text-gray-600 py-2 rounded-md text-sm font-medium"
+                    className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
                   >
                     <Button className="bg-[#F54749] duration-300">Register</Button>
                   </Link>
@@ -147,7 +157,7 @@ const Navbar = () => {
             )}
             <button
               type="button"
-              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               aria-controls="mobile-menu"
               aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
