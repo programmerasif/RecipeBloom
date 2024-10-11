@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import AddProduct from "@/components/common/AddProduct/AddProduct";
@@ -14,9 +15,10 @@ import { Check } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import premiumLogo from '../../../assets/premium.png'
 
 export default function RecipeFeed() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
@@ -28,7 +30,7 @@ export default function RecipeFeed() {
 
     // Check if there's new data
     if (newItems?.data.length > 0) {
-      setItems((prevItems) => [...prevItems, ...newItems.data]);
+      setItems((prevItems:any) => [...prevItems, ...newItems.data]);
       setHasMore(true);
     } else {
       setHasMore(false);
@@ -129,16 +131,13 @@ export default function RecipeFeed() {
               </CardContent>
             </div>
             <div className="flex justify-center items-center px-10">
-              <Card className="drop-shadow-xl">
-                <div className="p-10 rounded-md drop-shadow-lg">
-                  <CardTitle className="text-center rounded-md">
-                    Add-ons
-                  </CardTitle>
-                  <CardDescription>
-                    Enhance your experience with these add-ons
-                  </CardDescription>
-                </div>
-              </Card>
+            <Image
+                      src={premiumLogo}
+                      alt="premium logo"
+                      width={200}
+                      height={200}
+                      className=" rounded-md"
+                    />
             </div>
           </div>
           <div className="w-full p-8">

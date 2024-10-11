@@ -5,7 +5,7 @@ import { Heart, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 
-export default function ClientPostActions({ likes, comments }) {
+export default function ClientPostActions({ likes, comments }:{ likes:string, comments:string }) {
   const [likeCount, setLikeCount] = useState(likes);
 
   return (
