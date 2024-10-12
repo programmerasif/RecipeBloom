@@ -13,11 +13,13 @@ import DropItems from "./utils/DropItems";
 import { Button } from "../ui/button";
 import { navMenu } from "@/app/constant/constant";
 import Loader from "@/app/loader/loader";
+import { useAppDispatch } from "@/lib/hooks";
+import { clearUserInfo } from "@/redux/api/features/usersSlice/usersSlice";
 
 const Navbar = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const dispatch = useAppDispatch();
   type TUser = {
     role: string;
     email: string;
@@ -63,7 +65,8 @@ const Navbar = () => {
   const handleLogout = () => {
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
-
+    localStorage.removeItem('activeUser');
+    dispatch(clearUserInfo())
     setUser(null);
     setUserInfo({});
 

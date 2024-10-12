@@ -1,3 +1,5 @@
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,6 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAppSelector } from "@/lib/hooks";
+import { useCreateRecipeMutation } from "@/redux/api/features/recipe/recipe";
 import { PlusCircle, Search } from "lucide-react";
 import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -23,7 +27,13 @@ import "react-quill/dist/quill.snow.css";
 
 const AddProduct = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isimgUpload, setImgUpload] = useState(false);
+  const [addRecipe] = useCreateRecipeMutation();
+  const {_id} = useAppSelector((state) => state.user);
+  
+    
+
+  // const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -52,7 +62,7 @@ const AddProduct = () => {
     name: "ingredients",
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     const strippedContent = stripHtmlTags(data.content);
     if (strippedContent.length < 50) {
       setError("content", {
@@ -62,10 +72,54 @@ const AddProduct = () => {
       return;
     }
 
-    console.log(data); // Handle form submission
-    setIsDialogOpen(false); // Close dialog after successful submission
-    reset(); // Automatically reset the form after submission
-    setUploadedImage(null); // Clear the uploaded image after form submission
+    try {
+      if (data.recipeImage && data.recipeImage.length > 0) {
+        const formData = new FormData();
+        setImgUpload(true);
+        formData.append("image", data.recipeImage[0]); // Assumes the image is in data.recipeImage[0]
+
+        // Use fetch to upload the image to imgbb
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=27bd3f8b458a866a837ae2d474b63c50`, // Replace with your imgbb API key
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const result = await response.json();
+
+        if (result.success) {
+          setImgUpload(false);
+          // If upload is successful, get the URL of the image
+          const imageUrl = result.data.url;
+          // setUploadedImage(imageUrl)
+          // Now include the uploaded image URL in the data object
+          const updatedData = {
+            ...data,
+            recipeImage: imageUrl,
+            user: _id,
+            foodCategory: data?.category,
+            totalPeople: 10,
+            name: data?.title,
+            readyIn: Number(data?.readyIn),
+            description:data?.content
+          };
+          const res = await addRecipe(updatedData);
+          console.log(res);
+          console.log(updatedData);
+          // Perform other actions such as saving data to your backend
+
+          setIsDialogOpen(false); // Close dialog after successful submission
+          reset(); // Automatically reset the form after submission
+          // setUploadedImage(null); // Clear the uploaded image
+        } else {
+          console.error("Image upload failed", result);
+        }
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
 
   const handleContentChange = (val: string) => {
@@ -86,18 +140,6 @@ const AddProduct = () => {
     const div = document.createElement("div");
     div.innerHTML = html;
     return div.textContent || div.innerText || "";
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImage(reader.result as string);
-        setValue("recipeImage", reader.result as string); // Set the image data in recipeImage field
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   return (
@@ -146,7 +188,7 @@ const AddProduct = () => {
             <span>Add New Recipe</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Add New Recipe</DialogTitle>
           </DialogHeader>
@@ -250,58 +292,55 @@ const AddProduct = () => {
                           <path
                             fillRule="evenodd"
                             d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z"
-                            clipRule="evenodd"
                           />
                         </svg>
                       </Button>
                     </div>
+                    {errors.ingredients?.[index]?.name && (
+                      <p className="text-red-500 text-sm">
+                        {errors.ingredients[index].name.message}
+                      </p>
+                    )}
                   </div>
                 ))}
-
-                {errors.ingredients && (
-                  <p className="text-red-500 text-sm">
-                    {errors.ingredients.message}
-                  </p>
-                )}
               </div>
               <Button
                 type="button"
+                variant="outline"
                 onClick={() => append({ name: "" })}
-                className="w-full"
+                className="text-blue-600"
               >
                 Add Ingredient
               </Button>
-              {/* Image Upload */}
+
+              {/* Image Upload Field */}
               <div className="space-y-2">
-                <Label htmlFor="recipeImage">Recipe Image</Label>
-                <Input
-                  type="file"
+                <Label htmlFor="recipeImage">Upload Recipe Image</Label>
+                <input
                   id="recipeImage"
+                  type="file"
                   accept="image/*"
-                  onChange={handleImageChange}
+                  {...register("recipeImage")}
+                  className="border border-gray-300 rounded-md p-2"
                 />
-                {uploadedImage && (
-                  <div className="mt-2">
-                    <img
-                      src={uploadedImage}
-                      alt="Uploaded"
-                      className="h-40 w-full object-cover rounded-md"
-                    />
-                  </div>
-                )}
-                {errors.recipeImage && (
-                  <p className="text-red-500 text-sm">
-                    {errors.recipeImage.message}
-                  </p>
-                )}
+                {/* {uploadedImage && (
+                  <img
+                    src={uploadedImage}
+                    alt="Uploaded"
+                    className="mt-2 w-32 h-32 object-cover"
+                  />
+                )} */}
+                {isimgUpload && <p>Image uploading</p>}
               </div>
 
+              {/* Content Field */}
               <div className="space-y-2">
-                <Label htmlFor="content">Recipe Content</Label>
+                <Label htmlFor="content">Content</Label>
                 <ReactQuill
-                  theme="snow"
                   value={watch("content")}
                   onChange={handleContentChange}
+                  theme="snow"
+                  className="h-32"
                 />
                 {errors.content && (
                   <p className="text-red-500 text-sm">
@@ -309,15 +348,15 @@ const AddProduct = () => {
                   </p>
                 )}
               </div>
-            </div>
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 text-white rounded-md"
-            >
-              Submit Recipe
-            </Button>
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 text-white rounded-md mt-5"
+              >
+                Submit Recipe
+              </Button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>

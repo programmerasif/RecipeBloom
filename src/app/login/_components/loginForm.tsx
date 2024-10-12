@@ -16,7 +16,8 @@ import { useLoginMutation } from "@/redux/api/features/auth/authApi";
 import Cookies from "js-cookie";
 import { TResError } from "@/types/global.types";
 import { toast } from "sonner";
-import GoogleLoginBtn from "@/components/common/utils/GoogleLoginBtn";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { setUserInfo } from "@/redux/api/features/usersSlice/usersSlice";
 
 const userLoginSchema = z.object({
   email: z.string().email(),
@@ -27,10 +28,14 @@ const userLoginSchema = z.object({
 
 export default function LoginForm() {
   const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
+
+  // Select user info from Redux store with type safety
+ 
 
   const form = useForm({
     resolver: zodResolver(userLoginSchema),
-    mode:"onChange"
+    mode: "onChange",
   });
 
   const router = useRouter();
@@ -40,13 +45,16 @@ export default function LoginForm() {
     // Check if the user is already logged in
     const accessToken = Cookies.get("accessToken");
     if (accessToken && pathname === "/login") {
-      router.replace("/"); // Redirect to home if logged in
+      router.replace("/");
     }
   }, [router, pathname]);
   const onSubmit = async (data: any) => {
     try {
-      console.log("object");
       const res = await login(data);
+      // const {name} = (res?.data?.data?.user)
+
+      dispatch(setUserInfo(res?.data?.data?.user));
+      localStorage.setItem('activeUser', JSON.stringify(res?.data?.data?.user));
 
       if (res?.data?.data?.accessToken) {
         Cookies.set("accessToken", res.data.data.accessToken);
@@ -115,7 +123,7 @@ export default function LoginForm() {
       </Form>
       <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
       {/* Google login btn */}
-      <GoogleLoginBtn />
+      {/* <GoogleLoginBtn /> */}
       <div className="flex   justify-center pt-3  gap-2">
         <p>Don&apos;t have account </p>{" "}
         <Link href={"/sign-up"}>
@@ -148,4 +156,3 @@ const LabelInputContainer = ({
     </div>
   );
 };
-

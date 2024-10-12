@@ -23,7 +23,6 @@ import { useSignUpMutation } from "@/redux/api/features/auth/authApi";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { TResError } from "@/types/global.types";
-import GoogleLoginBtn from "@/components/common/utils/GoogleLoginBtn";
 import Cookies from "js-cookie";
 
 const userSignUpSchema = z.object({
@@ -159,7 +158,7 @@ export default function SignUpForm() {
           <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
 
           {/* Google login button */}
-          <GoogleLoginBtn />
+          {/* <GoogleLoginBtn /> */}
           <div className="flex   justify-center pt-3  gap-2">
             <p>Already have account </p>{" "}
             <Link href={"/login"}>

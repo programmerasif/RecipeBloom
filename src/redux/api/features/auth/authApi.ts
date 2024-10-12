@@ -32,11 +32,30 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    promoteToPremium: builder.mutation({
+      query: (data) => {
+        console.log(data);
+
+        return {
+          url: `/users/promote-premium/${data?.id}`,
+          method: "PATCH",
+          body: data?.isPremium,
+        };
+      },
+    }),
     getLoginUserInfo: builder.query({
       query: (mongodbId) => {
         console.log(mongodbId);
         return {
           url: `/users/${mongodbId}`,
+          method: "GET",
+        };
+      },
+    }),
+    getUsers: builder.query({
+      query: () => {
+        return {
+          url: `/users`,
           method: "GET",
         };
       },
@@ -48,4 +67,6 @@ export const {
   useSignUpMutation,
   useAddAdminMutation,
   useGetLoginUserInfoQuery,
+  usePromoteToPremiumMutation,
+  useGetUsersQuery
 } = authApi;

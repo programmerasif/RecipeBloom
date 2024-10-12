@@ -11,6 +11,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Sidebar, SidebarBody } from "@/components/ui/sidebar";
 import DashboardInterface from "@/components/common/DashboardInterface";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 // Define the SidebarLink component type to accept onClick
 type SidebarLinkProps = {
@@ -38,6 +40,9 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ link, onClick }) => {
 };
 
 const AdminMainDashboard = () => {
+  const user = useSelector((state: RootState) => state.user);
+  console.log(user);
+  
   const sideBrLinks = [
     {
       label: "Home",

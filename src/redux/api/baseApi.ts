@@ -10,8 +10,9 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
  
-    baseUrl: "https://recipe-bloom-backend.vercel.app/api/v1",
-    // baseUrl: "https://assignment-3-lovat-seven.vercel.app/api",
+    baseUrl: "http://localhost:5001/api/v1",
+    // baseUrl: "https://recipe-bloom-backend.vercel.app/api/v1",
+   
     credentials: 'include',
     prepareHeaders: (headers) => {
       const accessToken = getAccessToken();
