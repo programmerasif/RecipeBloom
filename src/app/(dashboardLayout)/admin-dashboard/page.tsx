@@ -52,29 +52,22 @@ const AdminMainDashboard = () => {
       ),
       component: "Home",
     },
+    
     {
-      label: "Dashboard",
-      href: "#",
-      icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-      component: "Dashboard",
-    },
-    {
-      label: "Profile",
+      label: "Manage User",
       href: "#",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
-      component: "Profile",
+      component: "ManageUser",
     },
     {
-      label: "Settings",
+      label: "Manage Recipe",
       href: "#",
       icon: (
         <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
-      component: "Settings",
+      component: "ManageRecipe",
     },
     {
       label: "Logout",
