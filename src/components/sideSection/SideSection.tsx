@@ -14,7 +14,7 @@ const SideSection = () => {
 
     const fetchUsers= async () => {
         const response = await fetch(
-          `http://localhost:5001/api/v1/users`
+          `https://recipe-bloom-backend.vercel.app/api/v1/users`
         );
         const allusers = await response.json();
         setusers(allusers);
@@ -24,7 +24,7 @@ const SideSection = () => {
       }, []);
 
       const handelPremium = async() =>{
-        const url = `http://localhost:5001/api/v1/users/promote-premium/${_id}`;
+        const url = `https://recipe-bloom-backend.vercel.app/api/v1/users/promote-premium/${_id}`;
         try {
           const response = await fetch(url, {
             method: 'PATCH', // Specify the request method

@@ -1,4 +1,5 @@
 import MyRecipes from "../MyRecipes/MyRecipes";
+import AddNewRecipe from "./AddNewRecipe/AddNewRecipe";
 
 const DashboardInterface = ({ activeComponent }:{activeComponent:string}) => {
     return (
@@ -9,6 +10,7 @@ const DashboardInterface = ({ activeComponent }:{activeComponent:string}) => {
         {activeComponent === "Logout" && <LogoutContent />}
         {activeComponent === "AdminSettings" && <AdminSettingsContent />}
         {activeComponent === "MyRecipes" && <MyRecipes />}
+        {activeComponent === "AddNewRecipe" && <AddNewRecipe />}
       </div>
     );
   };

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
 
@@ -60,6 +61,14 @@ const UserMainDashboard = () => {
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Profile",
+    },
+    {
+      label: "Add New Recipe",
+      href: "#",
+      icon: (
+        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+      component: "AddNewRecipe",
     },
     {
       label: "My Recipes",
