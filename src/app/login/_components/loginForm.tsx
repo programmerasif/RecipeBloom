@@ -87,10 +87,10 @@ export default function LoginForm() {
         onClick={check}
         className="font-bold text-xl text-neutral-800 dark:text-neutral-200"
       >
-        Welcome to TastyHub
+        Welcome to Recipe Bloom
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Login to TastyHub to discover amazing recipes and share your own.
+        we are committed to provide e testy food 
       </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="my-8">
