@@ -167,7 +167,8 @@ const Navbar = () => {
               aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <span className="sr-only">Open main menu</span>
+              {/* Open main menu */}
+              <span className="sr-only">Open</span>
               <svg
                 className={`${isMobileMenuOpen ? "hidden" : "block"} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"

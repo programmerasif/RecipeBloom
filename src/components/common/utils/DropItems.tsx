@@ -32,7 +32,6 @@ const DropItems = ({
               <DropdownMenuItem autoFocus={false}>
                 <Button className="font-bold h-8 w-full bg-blue-700 text-white">
                   
-                  <Link href={"/profile"}>Profile</Link>{" "}
                 </Button>
               </DropdownMenuItem>
   

@@ -89,10 +89,10 @@ export default function SignUpForm() {
   return (
     <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:px-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Welcome to TastyHub
+      Welcome to Recipe Bloom
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        SignUp to TastyHub to discover amazing recipes and share your own.
+      we are committed to provide e testy food 
       </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="my-8">

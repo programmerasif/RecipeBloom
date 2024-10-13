@@ -16,7 +16,7 @@ const About = () => {
   return (
     <>
             <section className="">
-              <div className="flex flex-col gap-y-8 xl:flex-row items-center max-w-6xl mx-auto mt-8 mb-20 rounded-lg ">
+              <div className="flex flex-col gap-y-8 xl:flex-row items-center max-w-6xl mx-auto pt-10 mb-20 rounded-lg ">
                 <div className="ml-9 xl:ml-0">
                   <h2 className="font-manrope text-5xl font-bold text-gray-900 mb-6 ">About Us</h2>
                   <p className="text-md xl:text-lg text-gray-500 font-sans w-10/12">Welcome to GamSpace, GameSpace makes sports facility booking quick and easy. Reserve courts and fields for your favorite sports with just a few clicks. Enjoy seamless scheduling, transparent pricing, and exclusive offers at GameSpace, your go-to platform for all sports activities.</p>
