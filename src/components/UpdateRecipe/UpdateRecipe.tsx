@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic"; // Import dynamic from Next.js
 import { useForm, useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,11 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { useUpdateRecipeMutation } from "@/redux/api/features/recipe/recipe";
 import { useAppSelector } from "@/lib/hooks";
 import Swal from "sweetalert2";
+
+// Dynamically import ReactQuill with SSR disabled
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface UpdateRecipeProps {
   recipeData: any; // Adjust the type based on the actual data structure
@@ -31,10 +33,17 @@ interface UpdateRecipeProps {
 
 const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // const [isImgUpload, setImgUpload] = useState(false);
-  const [updateRecipe] = useUpdateRecipeMutation()
+  const [updateRecipe] = useUpdateRecipeMutation();
   const { _id } = useAppSelector((state) => state.user);
-  const { register, handleSubmit, setValue, watch, formState: { errors }, control, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+    control,
+    reset,
+  } = useForm({
     defaultValues: {
       ingredients: [{ name: "" }],
       category: "",
@@ -44,6 +53,7 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
       description: "",
       recipeImage: "", 
       content: "",
+      name: "",
     },
   });
 
@@ -70,15 +80,15 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
         ([key, value]) => value !== "" && value !== null && value !== undefined
       )
     );
-     
+
     // Call the updateRecipe mutation with the recipe ID
     const res: any = await updateRecipe({ updateData, _id: recipeData?._id });
-  
+
     // Check if the update was successful
     if (res?.data?.success) {
       // Close the modal if the update is successful
       setIsDialogOpen(false);
-  
+
       // Show success alert
       Swal.fire({
         position: "center",
@@ -87,7 +97,7 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
         showConfirmButton: false,
         timer: 1500,
       });
-  
+
       // Optionally, reset the form (if needed)
       reset();
     } else {
@@ -100,6 +110,7 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
       });
     }
   };
+
   const handleContentChange = (val: string) => {
     setValue("content", val);
   };
@@ -127,7 +138,6 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
                 />
                 {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
               </div>
-
 
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>

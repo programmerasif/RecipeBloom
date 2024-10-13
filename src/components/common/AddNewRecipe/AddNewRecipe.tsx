@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -14,15 +13,17 @@ import { useAppSelector } from "@/lib/hooks";
 import { useCreateRecipeMutation } from "@/redux/api/features/recipe/recipe";
 import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic"; // Import dynamic for ReactQuill
 import "react-quill/dist/quill.snow.css";
+
+// Dynamically import ReactQuill with SSR disabled
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const AddNewRecipe = () => {
   const [isimgUpload, setImgUpload] = useState(false);
   const [addRecipe] = useCreateRecipeMutation();
   const { _id } = useAppSelector((state) => state.user);
 
-  // const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -42,7 +43,7 @@ const AddNewRecipe = () => {
       isVegetarian: false,
       totalPeople: "",
       description: "",
-      recipeImage: "", // This will hold the image data
+      recipeImage: "",
       content: "",
     },
   });
@@ -83,7 +84,6 @@ const AddNewRecipe = () => {
           setImgUpload(false);
           // If upload is successful, get the URL of the image
           const imageUrl = result.data.url;
-          // setUploadedImage(imageUrl)
           // Now include the uploaded image URL in the data object
           const updatedData = {
             ...data,
@@ -98,10 +98,8 @@ const AddNewRecipe = () => {
           const res = await addRecipe(updatedData);
           console.log(res);
           console.log(updatedData);
-          // Perform other actions such as saving data to your backend
 
           reset(); // Automatically reset the form after submission
-          // setUploadedImage(null); // Clear the uploaded image
         } else {
           console.error("Image upload failed", result);
         }
@@ -163,9 +161,7 @@ const AddNewRecipe = () => {
                 </SelectContent>
               </Select>
               {errors.category && (
-                <p className="text-red-500 text-sm">
-                  {errors.category.message}
-                </p>
+                <p className="text-red-500 text-sm">{errors.category.message}</p>
               )}
             </div>
 
@@ -232,7 +228,7 @@ const AddNewRecipe = () => {
                 type="button"
                 variant="outline"
                 onClick={() => append({ name: "" })}
-                className="text-blue-600 "
+                className="text-blue-600"
               >
                 Add Ingredient
               </Button>
@@ -240,7 +236,7 @@ const AddNewRecipe = () => {
 
             {/* Image Upload Field */}
             <div className="space-y-2 flex flex-col">
-              <Label htmlFor="recipeImage ">Upload Recipe Image</Label>
+              <Label htmlFor="recipeImage">Upload Recipe Image</Label>
               <input
                 id="recipeImage"
                 type="file"
@@ -248,13 +244,6 @@ const AddNewRecipe = () => {
                 {...register("recipeImage")}
                 className="border border-gray-300 rounded-md p-2"
               />
-              {/* {uploadedImage && (
-                  <img
-                    src={uploadedImage}
-                    alt="Uploaded"
-                    className="mt-2 w-32 h-32 object-cover"
-                  />
-                )} */}
               {isimgUpload && <p>Image uploading</p>}
             </div>
 
@@ -265,7 +254,7 @@ const AddNewRecipe = () => {
                 value={watch("content")}
                 onChange={handleContentChange}
                 theme="snow"
-                className=" h-20"
+                className="h-20"
               />
               {errors.content && (
                 <p className="text-red-500 text-sm">{errors.content.message}</p>
@@ -273,14 +262,14 @@ const AddNewRecipe = () => {
             </div>
 
             {/* Submit Button */}
-           <div className="mt-52">
-           <Button
-              type="submit"
+            <div className="mt-52">
+              <Button
+                type="submit"
                 className="w-full bg-[#b1cee0] text-white rounded-md mt-5"
-            >
-              Submit Recipe
-            </Button>
-           </div>
+              >
+                Submit Recipe
+              </Button>
+            </div>
           </div>
         </form>
       </div>

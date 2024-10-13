@@ -1,13 +1,32 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Check } from 'lucide-react'
 import Image from 'next/image'
 import { useAppSelector } from '@/lib/hooks'
 import premiumLogo from "../../assets/premium.png";
+type User = {
+  following: any[]; 
+  bio: string;
+  isBlocked: boolean;
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  image: string;
+  followers: any[]; 
+  recipePublished: any[];
+  isPremium: boolean;
+  socialLinks: any[]; 
+};
+type TUser = {
+  data:User[]
+}
+
 
 const SideSection = () => {
-    const [users, setusers] = useState([]);
-    const [premium, setIsPremium] = useState();
+    const [users, setusers] = useState<TUser>({ data: [] });
+    const [premium, setIsPremium] = useState<boolean>();
     const {_id} = useAppSelector((state) => state.user);
     
 
@@ -94,7 +113,7 @@ const SideSection = () => {
     </Card>
     <div className="bg-[#ebf5fb]  drop-shadow-xl min-h-[52vh] mt-5">
       <div className="flex flex-col gap-2 p-6">
-        {users?.data?.slice(0,6).map((item, index) => (
+        {users?.data?.slice(0,6).map((_item: any, index: React.Key | null | undefined) => (
           <div
             key={index}
             className="drop-shadow-xl bg-gray-50 p-2 rounded-md flex justify-start items-center"

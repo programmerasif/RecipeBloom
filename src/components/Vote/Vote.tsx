@@ -42,7 +42,7 @@ const Vote = (_id:any) => {
           variant="outline"
           size="icon"
           aria-label="Downvote"
-          onCanPlay={handelUpVot}
+          // onClick={handelUpVot}
         >
           <ThumbsDown className="h-4 w-4" />
         </Button>

@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
@@ -22,18 +21,18 @@ import { useCreateRecipeMutation } from "@/redux/api/features/recipe/recipe";
 import { PlusCircle, Search } from "lucide-react";
 import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic"; // Import dynamic from Next.js
+
+// Dynamically import ReactQuill with SSR disabled
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
 const AddProduct = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isimgUpload, setImgUpload] = useState(false);
   const [addRecipe] = useCreateRecipeMutation();
-  const {_id} = useAppSelector((state) => state.user);
-  
-    
+  const { _id } = useAppSelector((state) => state.user);
 
-  // const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -52,8 +51,10 @@ const AddProduct = () => {
       isVegetarian: false,
       totalPeople: "",
       description: "",
-      recipeImage: "", // This will hold the image data
+      recipeImage: "",
       content: "",
+      search: "",
+      title: " ",
     },
   });
 
@@ -93,7 +94,7 @@ const AddProduct = () => {
           setImgUpload(false);
           // If upload is successful, get the URL of the image
           const imageUrl = result.data.url;
-          // setUploadedImage(imageUrl)
+
           // Now include the uploaded image URL in the data object
           const updatedData = {
             ...data,
@@ -103,7 +104,7 @@ const AddProduct = () => {
             totalPeople: 10,
             name: data?.title,
             readyIn: Number(data?.readyIn),
-            description:data?.content
+            description: data?.content,
           };
           const res = await addRecipe(updatedData);
           console.log(res);
@@ -112,7 +113,6 @@ const AddProduct = () => {
 
           setIsDialogOpen(false); // Close dialog after successful submission
           reset(); // Automatically reset the form after submission
-          // setUploadedImage(null); // Clear the uploaded image
         } else {
           console.error("Image upload failed", result);
         }
@@ -268,95 +268,66 @@ const AddProduct = () => {
                 {fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="flex justify-start items-center space-x-2"
+                    className="flex items-center space-x-2 mb-2"
                   >
-                    <div className="relative">
-                      <Input
-                        {...register(`ingredients.${index}.name`, {
-                          required: "Ingredient name is required",
-                        })}
-                        placeholder="Enter ingredient"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => remove(index)}
-                        className="text-red-500 absolute top-0 right-0"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                          className="size-4"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm2.78-4.22a.75.75 0 0 1-1.06 0L8 9.06l-1.72 1.72a.75.75 0 1 1-1.06-1.06L6.94 8 5.22 6.28a.75.75 0 0 1 1.06-1.06L8 6.94l1.72-1.72a.75.75 0 1 1 1.06 1.06L9.06 8l1.72 1.72a.75.75 0 0 1 0 1.06Z"
-                          />
-                        </svg>
-                      </Button>
-                    </div>
-                    {errors.ingredients?.[index]?.name && (
-                      <p className="text-red-500 text-sm">
-                        {errors.ingredients[index].name.message}
-                      </p>
-                    )}
+                    <Input
+                      placeholder="Ingredient name"
+                      {...register(`ingredients.${index}.name` as const)}
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => remove(index)}
+                      variant="outline"
+                    >
+                      Remove
+                    </Button>
                   </div>
                 ))}
+                <Button
+                  type="button"
+                  onClick={() => append({ name: "" })}
+                  variant="outline"
+                >
+                  Add Ingredient
+                </Button>
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => append({ name: "" })}
-                className="text-blue-600"
-              >
-                Add Ingredient
-              </Button>
 
-              {/* Image Upload Field */}
+              {/* Recipe Image Upload */}
               <div className="space-y-2">
-                <Label htmlFor="recipeImage">Upload Recipe Image</Label>
-                <input
-                  id="recipeImage"
+                <Label htmlFor="recipeImage">Recipe Image</Label>
+                <Input
                   type="file"
                   accept="image/*"
                   {...register("recipeImage")}
-                  className="border border-gray-300 rounded-md p-2"
                 />
-                {/* {uploadedImage && (
-                  <img
-                    src={uploadedImage}
-                    alt="Uploaded"
-                    className="mt-2 w-32 h-32 object-cover"
-                  />
-                )} */}
-                {isimgUpload && <p>Image uploading</p>}
+                {isimgUpload && <p>Uploading image...</p>}
               </div>
 
-              {/* Content Field */}
+              {/* ReactQuill for Content */}
               <div className="space-y-2">
-                <Label htmlFor="content">Content</Label>
+                <Label>Content</Label>
                 <ReactQuill
+                  theme="snow"
                   value={watch("content")}
                   onChange={handleContentChange}
-                  theme="snow"
-                  className="h-32"
+                  modules={{
+                    toolbar: [
+                      ["bold", "italic", "underline"],
+                      ["link", "image"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["clean"],
+                    ],
+                  }}
                 />
                 {errors.content && (
-                  <p className="text-red-500 text-sm">
-                    {errors.content.message}
-                  </p>
+                  <p className="text-red-500 text-sm">{errors.content.message}</p>
                 )}
               </div>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                className="w-full bg-blue-600 text-white rounded-md mt-5"
-              >
-                Submit Recipe
-              </Button>
             </div>
+
+            <Button type="submit" className="w-full bg-blue-600 text-white">
+              Add Recipe
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
