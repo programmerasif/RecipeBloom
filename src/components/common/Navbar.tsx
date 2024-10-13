@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { decode } from "@/app/utils/jwtDecode";
 import Cookies from "js-cookie";
-import { useGetLoginUserInfoQuery } from "@/redux/api/features/auth/authApi";
+// import { useGetLoginUserInfoQuery } from "@/redux/api/features/auth/authApi";
 import Image from "next/image";
 import logo from "../../assets/logo.svg";
 import { useRouter } from "next/navigation";
@@ -13,11 +13,13 @@ import DropItems from "./utils/DropItems";
 import { Button } from "../ui/button";
 import { navMenu } from "@/app/constant/constant";
 import Loader from "@/app/loader/loader";
-import { useAppDispatch } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { clearUserInfo } from "@/redux/api/features/usersSlice/usersSlice";
 
 const Navbar = () => {
-
+  const userInfo = useAppSelector((state) => state.user);
+   
+    
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dispatch = useAppDispatch();
   type TUser = {
@@ -25,19 +27,19 @@ const Navbar = () => {
     email: string;
     mongoId: string;
   };
-  type TUserInfo = {
-    image?: string;
-    // Add other known properties if needed, like:
-    name?: string;
-    email?: string;
-    [key: string]: any; // Allow additional unknown properties
-  };
+  // type TUserInfo = {
+  //   image?: string;
+  //   // Add other known properties if needed, like:
+  //   name?: string;
+  //   email?: string;
+  //   [key: string]: any; // Allow additional unknown properties
+  // };
   
   const [user, setUser] = useState<TUser | null>(null);
-  const [userInfo, setUserInfo] = useState<TUserInfo>({});
+  // const [userInfo, setUserInfo] = useState<TUserInfo>({});
   const router = useRouter();
 
-  const { data, isLoading } = useGetLoginUserInfoQuery(user?.mongoId);
+  // const { data, isLoading } = useGetLoginUserInfoQuery(user?.mongoId);
 
   useEffect(() => {
     const accessToken = Cookies.get("accessToken");
@@ -45,7 +47,7 @@ const Navbar = () => {
       try {
         const decodedUser = decode(accessToken);
 
-        // Type guard to check if decodedUser has role and email properties
+      
         if (
           decodedUser &&
           typeof decodedUser === "object" &&
@@ -54,12 +56,12 @@ const Navbar = () => {
         ) {
           setUser(decodedUser as TUser);
         }
-        setUserInfo(data?.data);
+        // setUserInfo(data?.data);
       } catch (error) {
         console.error("Failed to decode token:", error);
       }
     }
-  }, [data?.data]);
+  }, []);
 
   const menuItems = navMenu(user?.role as string);
   const handleLogout = () => {
@@ -68,7 +70,7 @@ const Navbar = () => {
     localStorage.removeItem('activeUser');
     dispatch(clearUserInfo())
     setUser(null);
-    setUserInfo({});
+    // setUserInfo({});
 
     router.push("/");
   };
@@ -103,7 +105,7 @@ const Navbar = () => {
             </div>
           </div>
           <div className="hidden lg:block">
-            {isLoading ? (
+            {false ? (
               <Loader />
             ) : (
               <div>
@@ -133,7 +135,7 @@ const Navbar = () => {
           </div>
           <div className="-mr-2 flex items-center gap-3 lg:hidden">
             <div className="mt-4">{/* <DarkModeToggle /> */}</div>
-            {isLoading ? (
+            {false ? (
               <div>Loading</div>
             ) : (
               <div>

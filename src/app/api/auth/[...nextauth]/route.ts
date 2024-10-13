@@ -20,7 +20,7 @@ const handler = NextAuth({
 
         if (account?.provider === "google") {
           const response: any = await fetch(
-            `${process.env.NEXT_BASE_URL}/auth/login`,
+            `${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`,
             {
               method: "POST",
               headers: {

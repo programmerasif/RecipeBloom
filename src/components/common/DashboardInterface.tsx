@@ -1,3 +1,5 @@
+import MyRecipes from "../MyRecipes/MyRecipes";
+
 const DashboardInterface = ({ activeComponent }:{activeComponent:string}) => {
     return (
       <div className="flex flex-1 p-4">
@@ -6,6 +8,7 @@ const DashboardInterface = ({ activeComponent }:{activeComponent:string}) => {
         {activeComponent === "Settings" && <SettingsContent />}
         {activeComponent === "Logout" && <LogoutContent />}
         {activeComponent === "AdminSettings" && <AdminSettingsContent />}
+        {activeComponent === "MyRecipes" && <MyRecipes />}
       </div>
     );
   };
@@ -29,6 +32,8 @@ const DashboardContent = () => {
   const AdminSettingsContent = () => {
     return <div>Settings content here</div>;
   };
+  
+  
   
   const LogoutContent = () => {
     return <div>Logout content here</div>;

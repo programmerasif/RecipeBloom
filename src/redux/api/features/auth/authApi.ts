@@ -43,15 +43,16 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getLoginUserInfo: builder.query({
-      query: (mongodbId) => {
-        console.log(mongodbId);
-        return {
-          url: `/users/${mongodbId}`,
-          method: "GET",
-        };
-      },
-    }),
+    // getLoginUserInfo: builder.query({
+    //   query: (mongodbId) => {
+    //     console.log(mongodbId);
+    //     return {
+    //       url: `/users/${mongodbId}`,
+    //       method: "GET",
+    //       credentials:"include"
+    //     };
+    //   },
+    // }),
     getUsers: builder.query({
       query: () => {
         return {
@@ -66,7 +67,7 @@ export const {
   useLoginMutation,
   useSignUpMutation,
   useAddAdminMutation,
-  useGetLoginUserInfoQuery,
+  // useGetLoginUserInfoQuery,
   usePromoteToPremiumMutation,
   useGetUsersQuery
 } = authApi;
