@@ -1,14 +1,14 @@
 
 
 export const navMenu = (role:string) =>{
-  console.log(role);
+ 
   
-    const dashBoardLink =
-    role == "admin"
-      ? "admin-dashboard"
-      : role == "user"
-      ? "user-dashboard"
-      : "login";
+  const dashBoardLink =
+  role === "admin"
+    ? "admin-dashboard"
+    : role === "user"
+    ? "user-dashboard"
+    : "login"; 
     const menus = [
         { id: 1, href: "/", linkText: "Home" },
         // { id: 2, href: "/packages", linkText: "Discover" },

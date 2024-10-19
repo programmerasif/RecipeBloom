@@ -20,7 +20,7 @@ const recipeApi = baseApi.injectEndpoints({
     getUserRecipes: builder.query({
       query: (data) => {
         const { query, id } = data;
-        console.log(query, id, "line 20 api");
+      
         if (query?.search) {
           return `/recipe/user/${id}?searchTerm=${query?.search}&page=${query.page}&limit=1`;
         }
@@ -42,6 +42,24 @@ const recipeApi = baseApi.injectEndpoints({
           method: "post",
 
           body: data,
+        };
+      },
+    }),
+    comments: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/comment`,
+          method: "post",
+
+          body: data,
+        };
+      },
+    }),
+    getComments: builder.query({
+      query: (id) => {
+        return {
+          url: `/comment/${id}`,
+          method: "GET",
         };
       },
     }),
@@ -81,4 +99,6 @@ export const {
   useUpdateRecipeMutation,
   useGetUserFeedRecipesQuery,
   useGetSingleRecipeQuery,
+  useCommentsMutation,
+  useGetCommentsQuery
 } = recipeApi;

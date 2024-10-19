@@ -8,7 +8,7 @@ const authRoutes = ["/login", "/register"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  console.log(pathname, "pathname");
+ 
 
   const accessToken = cookies().get("accessToken")?.value;
 
@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
 
   decodedToken = decode(accessToken) as any;
 
-  console.log(decodedToken, "decodedToken");
+  
 
   const role = decodedToken?.role;
 

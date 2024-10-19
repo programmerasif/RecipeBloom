@@ -5,7 +5,7 @@ interface UserState {
   email: string | null;
   followers: string[];
   following: string[];
-  image: string |null;
+  image: string | null;
   isBlocked: boolean;
   isPremium: boolean;
   name: string | null;
@@ -14,6 +14,7 @@ interface UserState {
   role: string | null;
   socialLinks: string[];
   _id: string | null;
+  token: string | null;
 }
 
 // Define the initial state based on the user data
@@ -31,6 +32,7 @@ const initialState: UserState = {
   role: null, // User role
   socialLinks: [], // Social media links
   _id: null, // User's unique ID
+  token: null,
 };
 
 const userSlice = createSlice({
@@ -40,15 +42,15 @@ const userSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<Partial<UserState>>) => {
       return { ...state, ...action.payload };
     },
+    setIsPremiumMembership: (state, action: PayloadAction<boolean>) => {
+      state.isPremium = action.payload;
+    },
     // Clear user info (reset to initial state)
     clearUserInfo: () => initialState,
   },
 });
 
-export const {
-  setUserInfo,
-  clearUserInfo,
-} = userSlice.actions;
+export const { setUserInfo, setIsPremiumMembership,clearUserInfo } = userSlice.actions;
 
 // Export the reducer
 export default userSlice.reducer;

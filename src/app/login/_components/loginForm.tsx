@@ -52,9 +52,28 @@ export default function LoginForm() {
   const onSubmit = async (data: any) => {
     try {
       const res = await login(data);
-      // const {name} = (res?.data?.data?.user)
-
-      dispatch(setUserInfo(res?.data?.data?.user));
+      const user = res?.data?.data?.user;
+      const token = res?.data?.data?.accessToken;
+  
+      // Map the response to match the structure of UserState
+      const newObj = {
+        bio: user?.bio || "",
+        email: user?.email || null,
+        followers: user?.followers || [],
+        following: user?.following || [],
+        image: user?.image || null,
+        isBlocked: user?.isBlocked || false,
+        isPremium: user?.isPremium || false,
+        name: user?.name || null,
+        password: user?.password || "",
+        recipePublished: user?.recipePublished || [],
+        role: user?.role || null,
+        socialLinks: user?.socialLinks || [],
+        _id: user?._id || null,
+        token: token || null, // Include the token here
+      };
+  
+      dispatch(setUserInfo(newObj));
       localStorage.setItem('activeUser', JSON.stringify(res?.data?.data?.user));
 
       if (res?.data?.data?.accessToken) {
@@ -78,7 +97,7 @@ export default function LoginForm() {
     }
   };
   const check = async () => {
-    console.log("hello");
+    
   };
 
   return (

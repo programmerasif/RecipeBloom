@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import dynamic from "next/dynamic"; // Import dynamic for ReactQuill
 import "react-quill/dist/quill.snow.css";
+import Swal from "sweetalert2";
 
 // Dynamically import ReactQuill with SSR disabled
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -23,6 +24,7 @@ const AddNewRecipe = () => {
   const [isimgUpload, setImgUpload] = useState(false);
   const [addRecipe] = useCreateRecipeMutation();
   const { _id } = useAppSelector((state) => state.user);
+  
 
   const {
     register,
@@ -95,9 +97,18 @@ const AddNewRecipe = () => {
             readyIn: Number(data?.readyIn),
             description: data?.content,
           };
-          const res = await addRecipe(updatedData);
-          console.log(res);
-          console.log(updatedData);
+          await addRecipe(updatedData);
+        
+        
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Recipe has been saved",
+              showConfirmButton: false,
+              timer: 1500
+            });
+      
+          
 
           reset(); // Automatically reset the form after submission
         } else {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -18,8 +19,8 @@ import { clearUserInfo } from "@/redux/api/features/usersSlice/usersSlice";
 
 const Navbar = () => {
   const userInfo = useAppSelector((state) => state.user);
-   
-    
+
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dispatch = useAppDispatch();
   type TUser = {
@@ -27,19 +28,13 @@ const Navbar = () => {
     email: string;
     mongoId: string;
   };
-  // type TUserInfo = {
-  //   image?: string;
-  //   // Add other known properties if needed, like:
-  //   name?: string;
-  //   email?: string;
-  //   [key: string]: any; // Allow additional unknown properties
-  // };
   
+
   const [user, setUser] = useState<TUser | null>(null);
-  // const [userInfo, setUserInfo] = useState<TUserInfo>({});
+  
   const router = useRouter();
 
-  // const { data, isLoading } = useGetLoginUserInfoQuery(user?.mongoId);
+  
 
   useEffect(() => {
     const accessToken = Cookies.get("accessToken");
@@ -47,7 +42,6 @@ const Navbar = () => {
       try {
         const decodedUser = decode(accessToken);
 
-      
         if (
           decodedUser &&
           typeof decodedUser === "object" &&
@@ -56,19 +50,20 @@ const Navbar = () => {
         ) {
           setUser(decodedUser as TUser);
         }
-        // setUserInfo(data?.data);
+       
       } catch (error) {
         console.error("Failed to decode token:", error);
       }
     }
   }, []);
 
-  const menuItems = navMenu(user?.role as string);
+
+  const menuItems = navMenu(userInfo?.role as string);
   const handleLogout = () => {
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
-    localStorage.removeItem('activeUser');
-    dispatch(clearUserInfo())
+    localStorage.removeItem("activeUser");
+    dispatch(clearUserInfo());
     setUser(null);
     // setUserInfo({});
 
@@ -77,7 +72,6 @@ const Navbar = () => {
 
   return (
     <nav className="container mb-10 z-20 transition-all duration-300 bg-[#b1cee0] px-4 rounded-md fixed">
-      
       <div className="mx-auto w-full">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
@@ -117,17 +111,21 @@ const Navbar = () => {
                 ) : (
                   <div className="flex justify-center items-center gap-5">
                     <Link
-                    href="/login"
-                    className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
-                  >
-                    <Button className="bg-[#F54749] duration-300">Login</Button>
-                  </Link>
-                  <Link
-                    href="/sign-up"
-                    className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
-                  >
-                    <Button className="bg-[#F54749] duration-300">Register</Button>
-                  </Link>
+                      href="/login"
+                      className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
+                    >
+                      <Button className="bg-[#F54749] duration-300">
+                        Login
+                      </Button>
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
+                    >
+                      <Button className="bg-[#F54749] duration-300">
+                        Register
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -135,9 +133,7 @@ const Navbar = () => {
           </div>
           <div className="-mr-2 flex items-center gap-3 lg:hidden">
             <div className="mt-4">{/* <DarkModeToggle /> */}</div>
-            {false ? (
-              <div>Loading</div>
-            ) : (
+             (
               <div>
                 {userInfo?.image ? (
                   <DropItems
@@ -159,7 +155,7 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
-            )}
+            )
             <button
               type="button"
               className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"

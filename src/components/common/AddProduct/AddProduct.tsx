@@ -77,11 +77,11 @@ const AddProduct = () => {
       if (data.recipeImage && data.recipeImage.length > 0) {
         const formData = new FormData();
         setImgUpload(true);
-        formData.append("image", data.recipeImage[0]); // Assumes the image is in data.recipeImage[0]
+        formData.append("image", data.recipeImage[0]); 
 
         // Use fetch to upload the image to imgbb
         const response = await fetch(
-          `https://api.imgbb.com/1/upload?key=27bd3f8b458a866a837ae2d474b63c50`, // Replace with your imgbb API key
+          `https://api.imgbb.com/1/upload?key=27bd3f8b458a866a837ae2d474b63c50`, 
           {
             method: "POST",
             body: formData,
@@ -106,9 +106,9 @@ const AddProduct = () => {
             readyIn: Number(data?.readyIn),
             description: data?.content,
           };
-          const res = await addRecipe(updatedData);
-          console.log(res);
-          console.log(updatedData);
+          await addRecipe(updatedData);
+         
+         
           // Perform other actions such as saving data to your backend
 
           setIsDialogOpen(false); // Close dialog after successful submission
@@ -143,7 +143,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="mb-8 space-y-4">
+    <div className="mb-8 space-y-4 bg-[#ebf5fb] py-5">
       {/* Search and Filters */}
       <div className="flex items-center space-x-2">
         <div className="flex-grow">
@@ -183,7 +183,7 @@ const AddProduct = () => {
       {/* Add Recipe Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full bg-blue-600 text-white rounded-md py-2 flex justify-center items-center space-x-2">
+          <Button className="w-full bg-[#b1cee0] text-white rounded-md py-2 flex justify-center items-center space-x-2 hover:bg-[#b1cee0a9] duration-300">
             <PlusCircle className="h-5 w-5" />
             <span>Add New Recipe</span>
           </Button>

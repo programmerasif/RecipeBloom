@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use clint";
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -38,7 +39,7 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import { useAppSelector } from "@/lib/hooks";
 import {
   useDeleteRecipeMutation,
-  useGetUserRecipesQuery,
+  useGetUserFeedRecipesQuery,
  
 } from "@/redux/api/features/recipe/recipe";
 import { useEffect, useState } from "react";
@@ -47,7 +48,7 @@ import Swal from "sweetalert2";
 import UpdateRecipe from "../UpdateRecipe/UpdateRecipe";
 
 const ManageRecipe = () => {
-  const { _id } = useAppSelector((state) => state.user);
+  
   const [page, setPage] = useState(1);
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const { handleSubmit, register, reset } = useForm(); // initialize useForm for searchtate
@@ -57,12 +58,8 @@ const ManageRecipe = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteFacility] = useDeleteRecipeMutation();
 
-  const { data: recipe } = useGetUserRecipesQuery({
-    query: {
-      page,
-      search: searchTerm,
-    },
-    id: _id,
+  const { data: recipe } = useGetUserFeedRecipesQuery({
+    page,
   },{
     pollingInterval: 1000,
   });
@@ -74,13 +71,13 @@ const ManageRecipe = () => {
   const handlePaginateNext = () => {
     if (recipe?.meta?.totalPage > recipe?.meta?.page) {
       setPage(page + 1);
-      console.log("inside");
+      
     }
     // console.log('out inside',recipe?.meta);
   };
 
   const handelDelete = async (id: string) => {
-    console.log(id);
+   
 
     Swal.fire({
       title: "Are you sure?",
@@ -105,7 +102,6 @@ const ManageRecipe = () => {
   // Function to handle search submission (only search triggered by button)
   const onSearchSubmit = (data: any) => {
     setSearchQuery(data.search); // Save the search query
-    console.log("Search Data:", searchQuery);
     setPage(1);
     setSearchTerm(searchQuery);
     reset({ Search: "" });

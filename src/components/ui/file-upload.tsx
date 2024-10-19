@@ -71,7 +71,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setUploadedImages(updatedImages);
     onChange(updatedImages);
   };
-  console.log(uploadedImages);
+ 
   return (
     <div>
       <AnimatePresence>

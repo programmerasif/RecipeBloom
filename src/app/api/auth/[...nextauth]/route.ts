@@ -12,7 +12,7 @@ const handler = NextAuth({
   callbacks: {
     async signIn({ profile, account }: any) {
       try {
-        console.log({ profile, account });
+       
 
         if (!profile || !account) {
           return false;
@@ -37,11 +37,7 @@ const handler = NextAuth({
           );
 
           const data = await response.json();
-          console.log({
-            name: profile.name,
-            email: profile.email,
-            image: profile.picture,
-          });
+        
           console.log(data?.data);
           console.log(data);
 

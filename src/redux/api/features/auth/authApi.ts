@@ -4,7 +4,6 @@ const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (userInfo) => {
-        console.log(userInfo);
         return {
           url: "/auth/login",
           method: "POST",
@@ -14,7 +13,6 @@ const authApi = baseApi.injectEndpoints({
     }),
     signUp: builder.mutation({
       query: (userInfo) => {
-        console.log(userInfo);
         return {
           url: "/auth/register",
           method: "POST",
@@ -24,7 +22,6 @@ const authApi = baseApi.injectEndpoints({
     }),
     addAdmin: builder.mutation({
       query: (userInfo) => {
-        console.log(userInfo);
         return {
           url: "/auth/add-admin",
           method: "POST",
@@ -34,8 +31,6 @@ const authApi = baseApi.injectEndpoints({
     }),
     promoteToPremium: builder.mutation({
       query: (data) => {
-        console.log(data);
-
         return {
           url: `/users/promote-premium/${data?.id}`,
           method: "PATCH",
@@ -43,21 +38,64 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
-    // getLoginUserInfo: builder.query({
-    //   query: (mongodbId) => {
-    //     console.log(mongodbId);
-    //     return {
-    //       url: `/users/${mongodbId}`,
-    //       method: "GET",
-    //       credentials:"include"
-    //     };
-    //   },
-    // }),
+
     getUsers: builder.query({
+      query: (query) => {
+        if (query?.search) {
+          return `users/?searchTerm=${query?.search}&page=${query.page}&limit=2`;
+        }
+        return `users/?limit=2&page=${query?.page}`;
+      },
+    }),
+    getUsersStatus: builder.query({
       query: () => {
+        return `users/`;
+      },
+    }),
+    getSingleUser: builder.query({
+      query: (id) => {
+        return `/users/${id}`;
+      },
+    }),
+    changeUserStatus: builder.mutation({
+      query: (id) => {
         return {
-          url: `/users`,
-          method: "GET",
+          url: `users/status/${id}`,
+          method: "PATCH",
+        };
+      },
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => {
+        return {
+          url: `users/${id}`,
+          method: "DELETE",
+        };
+      },
+    }),
+    promotedToAdmin: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/promote-admin/${id}`,
+          method: "PATCH",
+        };
+      },
+    }),
+    followUser: builder.mutation({
+      query: (data) => {
+        return {
+          url: "/users/follow",
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
+    unFollowUser: builder.mutation({
+      query: (data) => {
+        return {
+          url: "/users/unfollow",
+          method: "POST",
+          body: data,
         };
       },
     }),
@@ -67,7 +105,13 @@ export const {
   useLoginMutation,
   useSignUpMutation,
   useAddAdminMutation,
-  // useGetLoginUserInfoQuery,
   usePromoteToPremiumMutation,
-  useGetUsersQuery
+  useGetUsersQuery,
+  useChangeUserStatusMutation,
+  useDeleteUserMutation,
+  usePromotedToAdminMutation,
+  useGetUsersStatusQuery,
+  useFollowUserMutation,
+  useUnFollowUserMutation,
+  useGetSingleUserQuery
 } = authApi;

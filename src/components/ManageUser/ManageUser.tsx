@@ -1,4 +1,3 @@
-
 "use clint";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
@@ -16,55 +15,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Slider } from "@/components/ui/slider";
-import { Search, SlidersHorizontal } from "lucide-react";
-import { useAppSelector } from "@/lib/hooks";
-import {
-  useDeleteRecipeMutation,
-  useGetUserRecipesQuery,
- 
-} from "@/redux/api/features/recipe/recipe";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+
+
+import { useState } from "react";
 import Swal from "sweetalert2";
-import UpdateRecipe from "../UpdateRecipe/UpdateRecipe";
+import {
+  useChangeUserStatusMutation,
+  useDeleteUserMutation,
+  useGetUsersQuery,
+  usePromotedToAdminMutation,
+} from "@/redux/api/features/auth/authApi";
 
 const ManageUser = () => {
-  const { _id } = useAppSelector((state) => state.user);
   const [page, setPage] = useState(1);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
-  const { handleSubmit, register, reset } = useForm(); // initialize useForm for searchtate
-  const [category, setCategory] = useState("all"); // Category state
-  const [sortBy, setSortBy] = useState("relevance"); // Sort by state
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [deleteFacility] = useDeleteRecipeMutation();
+  const [changeUserStatus] = useChangeUserStatusMutation();
+  const [deleteUser] = useDeleteUserMutation();
+  const [promotedToAdmin] = usePromotedToAdminMutation();
 
-  const { data: recipe } = useGetUserRecipesQuery({
-    query: {
-      page,
-      search: searchTerm,
-    },
-    id: _id,
-  },{
-    pollingInterval: 1000,
+  const { data: users } = useGetUsersQuery({
+    page,
   });
 
   const handlePaginatePrev = () => {
@@ -72,15 +41,40 @@ const ManageUser = () => {
   };
 
   const handlePaginateNext = () => {
-    if (recipe?.meta?.totalPage > recipe?.meta?.page) {
+    if (users?.meta?.totalPage > users?.meta?.page) {
       setPage(page + 1);
-      console.log("inside");
+      
     }
-    // console.log('out inside',recipe?.meta);
+    // console.log('out inside',users?.meta);
   };
 
-  const handelDelete = async (id: string) => {
-    console.log(id);
+  const handelBlock = async (id: string, status: boolean) => {
+   
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, do it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await changeUserStatus(id);
+        Swal.fire({
+          title: `${status ? "Unblock" : "Blocked"}`,
+          text: `${
+            status ? "User Unblocked successful" : "User Blocked successful"
+          }`,
+          icon: "success",
+        });
+      }
+    });
+  };
+
+  const handelDeleteUser = async (id: string) => {
+   
 
     Swal.fire({
       title: "Are you sure?",
@@ -92,39 +86,41 @@ const ManageUser = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await deleteFacility(id);
+         await deleteUser(id);
+       
+
         Swal.fire({
           title: "Deleted!",
-          text: "Your file has been deleted.",
+          text: "User has been deleted.",
           icon: "success",
         });
       }
     });
   };
+  const handelPromotedToAdmin = async (id: string) => {
+    
 
-  // Function to handle search submission (only search triggered by button)
-  const onSearchSubmit = (data: any) => {
-    setSearchQuery(data.search); // Save the search query
-    console.log("Search Data:", searchQuery);
-    setPage(1);
-    setSearchTerm(searchQuery);
-    reset({ Search: "" });
-    // Call the API with search data here
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+         await promotedToAdmin(id);
+      
+
+        Swal.fire({
+          title: "Promoted!",
+          text: "User has been Promoted Admin",
+          icon: "success",
+        });
+      }
+    });
   };
-
-  // Effect to handle instant filtering when price range or category changes
-  useEffect(() => {
-    // Perform the API request whenever filtering criteria change
-    console.log("Instant Filter Update:", { category, priceRange });
-    // You would call the API here for filtering
-  }, [category, priceRange]);
-
-  // Effect to handle sorting changes instantly
-  useEffect(() => {
-    // Perform the API request when sorting changes
-    console.log("Instant Sort Update:", { sortBy });
-    // You would call the API here for sorting
-  }, [sortBy]);
 
   return (
     <div className="sm:px-6 lg:px-20 mt-20 md:mt-28 w-full">
@@ -155,133 +151,74 @@ const ManageUser = () => {
         </button>
       </div>
       {/* search filtering sorting */}
-      <div className="flex items-center space-x-2 mb-4">
-        {/* Search Input */}
-        <form
-          onSubmit={handleSubmit(onSearchSubmit)}
-          className="relative flex-grow"
-        >
-          <div className="flex justify-center items-center gap-2 w-full">
-            <div className="w-full">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search products..."
-                className="pl-8 w-full"
-                {...register("search")} // Register search input with react-hook-form
-              />
-            </div>
-            <Button type="submit" className="ml-2">
-              Search
-            </Button>
-          </div>
-        </form>
 
-        {/* Filter Sheet */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
-              <SlidersHorizontal className="h-4 w-4" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
-              <SheetDescription>
-                Narrow down your product search
-              </SheetDescription>
-            </SheetHeader>
-            <div className="grid gap-4 py-4">
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium">Category</h3>
-                <Select
-                  value={category}
-                  onValueChange={(value) => setCategory(value)} // Set category on change
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="electronics">Electronics</SelectItem>
-                    <SelectItem value="clothing">Clothing</SelectItem>
-                    <SelectItem value="books">Books</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium">Price Range</h3>
-                <Slider
-                  min={0}
-                  max={1000}
-                  step={10}
-                  value={priceRange}
-                  onValueChange={setPriceRange} // Update price range state instantly
-                />
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>${priceRange[0]}</span>
-                  <span>${priceRange[1]}</span>
-                </div>
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
-
-        {/* Sort Dropdown (instant sorting) */}
-        <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="relevance">Relevance</SelectItem>
-            <SelectItem value="price-low-high">Price: Low to High</SelectItem>
-            <SelectItem value="price-high-low">Price: High to Low</SelectItem>
-            <SelectItem value="newest">Newest Arrivals</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
       <div className="bg-[#fbfcfd] shadow-sm min-h-[40vh]">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Image</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead className="text-start">Category</TableHead>
+              <TableHead >Status</TableHead>
+              <TableHead >Update</TableHead>
               <TableHead className="text-center">Status</TableHead>
               <TableHead className="text-start">Update</TableHead>
               <TableHead className="text-start">Remove</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recipe?.data?.map((item: any) => (
+            {users?.data?.map((item: any) => (
               <TableRow key={item?._id}>
                 <TableCell className="font-bold text-balance text-[#262626e5] w-[22%] bg-[#EBF5FB] rounded-br-full">
                   {item?.name}
                 </TableCell>
+
                 <TableCell>
                   <img
                     className="size-8 rounded-xl"
-                    src={item?.recipeImage}
+                    src={item?.image}
                     alt="product"
                   />
                 </TableCell>
-                <TableCell>
-                  <span className="text-green-500 font-semibold"></span>{" "}
-                  Ready In  {item?.readyIn} (minutes)
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-row justify-start items-start gap-2">
-                    {item?.foodCategory}
-                  </div>
-                </TableCell>
+
 
                 <TableCell>
                   <div className="flex flex-row justify-center items-center gap-2 cursor-pointer">
-                    {!item?.isPublished ? (
+                    {item?.role != "admin" ? (
+                      <span className="text-orange-500 font-semibold bg-red-100 px-2 rounded-md">
+                        {" "}
+                        User
+                      </span>
+                    ) : (
+                      <span className="text-green-500 font-semibold bg-green-100 px-2 rounded-md">
+                        Admin
+                      </span>
+                    )}
+                  </div>
+                </TableCell>
+
+
+                <div onClick={() => handelPromotedToAdmin(item._id)}>
+                <TableCell>
+                  <div className="flex flex-row justify-center items-center gap-2 cursor-pointer">
+                    {item?.role != "admin" ? (
+                      <span className="text-orange-500 font-semibold bg-red-100 px-2 rounded-md">
+                        {" "}
+                        Make Admin
+                      </span>
+                    ) : (
+                      <span className="text-green-500 font-semibold bg-green-100 px-2 rounded-md">
+                        Already Admin
+                      </span>
+                    )}
+                  </div>
+                </TableCell>
+                </div>
+                <TableCell>
+                  <div className="flex flex-row justify-center items-center gap-2 cursor-pointer">
+                    {item?.isBlocked ? (
                       <span className="text-red-500 font-semibold bg-red-100 px-2 rounded-md">
                         {" "}
-                        Removed
+                        Block
                       </span>
                     ) : (
                       <span className="text-green-500 font-semibold bg-green-100 px-2 rounded-md">
@@ -290,12 +227,23 @@ const ManageUser = () => {
                     )}
                   </div>
                 </TableCell>
-                <TableCell>
-                  <button className=" bg-green-100 rounded-md">
-                    {/* <UpdateModal singleItem={item}/> */}
-                    <UpdateRecipe recipeData={item} />
-                  </button>
-                </TableCell>
+                <div onClick={() => handelBlock(item._id, item?.isBlocked)}>
+                  <TableCell>
+                    <button className=" bg-green-100 rounded-md">
+                      {/* <UpdateModal singleItem={item}/> */}
+                      {!item?.isBlocked ? (
+                        <span className="text-red-500 font-semibold bg-red-100 px-2 rounded-md">
+                          {" "}
+                          Block user
+                        </span>
+                      ) : (
+                        <span className="text-green-500 font-semibold bg-green-100 px-2 rounded-md">
+                          Allow User
+                        </span>
+                      )}
+                    </button>
+                  </TableCell>
+                </div>
                 <TableCell>
                   <button
                     className={` font-semibold  px-3 py-1 rounded-md ${
@@ -303,7 +251,7 @@ const ManageUser = () => {
                         ? "disabled bg-gray-200"
                         : "bg-red-100 text-red-500"
                     }`}
-                    onClick={() => handelDelete(item?._id)}
+                    onClick={() => handelDeleteUser(item?._id)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -358,12 +306,12 @@ const ManageUser = () => {
             <PaginationItem>
               <button
                 className={`${
-                  !recipe?.meta?.totalPage > recipe?.meta?.page
+                  !users?.meta?.totalPage > users?.meta?.page
                     ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
                     : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
                 } `}
                 onClick={handlePaginateNext}
-                disabled={!recipe?.meta?.totalPage > recipe?.meta?.page}
+                disabled={!users?.meta?.totalPage > users?.meta?.page}
               >
                 Next
               </button>

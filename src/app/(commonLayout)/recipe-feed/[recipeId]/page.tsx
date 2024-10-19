@@ -1,18 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import Image from "next/image";
 import { Star, Clock, ThumbsUp, Send, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import DOMPurify from "dompurify";
-import { useGetSingleRecipeQuery } from "@/redux/api/features/recipe/recipe";
-function DetailRecipe({ params }: { params: { recipeId: string } }) {
-  const { data, isLoading } = useGetSingleRecipeQuery(params?.recipeId);
-  console.log(data);
+import {
+  useCommentsMutation,
+  useGetCommentsQuery,
+  useGetSingleRecipeQuery,
+} from "@/redux/api/features/recipe/recipe";
+import { useForm } from "react-hook-form";
+import { useAppSelector } from "@/lib/hooks";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-  console.log(params);
+type FormData = {
+  comment: string;
+};
+
+function DetailRecipe({ params }: { params: { recipeId: string } }) {
+  const router = useRouter();
+  const { data, isLoading } = useGetSingleRecipeQuery(params?.recipeId);
+  const [giveComment, { isLoading: commenting }] = useCommentsMutation();
+  const { data: allComment } = useGetCommentsQuery(params?.recipeId, {
+    pollingInterval: 1000,
+  });
+  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { _id, name } = useAppSelector((state) => state.user);
+
+  
+// const isPremium = data?.data?.isPremium
+// console.log(isPremium);
+
+
   const recipe = {
     title: "Delicious Homemade Pizza",
     author: "Jane Doe",
@@ -46,6 +70,17 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
     ],
   };
 
+  const onSubmit = async (data: FormData) => {
+    const comment = {
+      userId: _id,
+      recipeId: params?.recipeId,
+      title: name,
+      comment: data?.comment,
+    };
+    await giveComment(comment);
+    reset();
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-8 pt-24">
       <div className="space-y-4">
@@ -73,12 +108,14 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
           </div>
         </div>
         <div>
-       <span className="font-semibold mb-2"> Ingredients</span>
-        <div className="flex flex-wrap justify-start items-center gap-2">
-        {recipe.ingredients.map((ingredient, index) => (
-              <span key={index} className="px-3 py-1 border-2">{ingredient}</span>
+          <span className="font-semibold mb-2"> Ingredients</span>
+          <div className="flex flex-wrap justify-start items-center gap-2">
+            {recipe.ingredients.map((ingredient, index) => (
+              <span key={index} className="px-3 py-1 border-2">
+                {ingredient}
+              </span>
             ))}
-        </div>
+          </div>
         </div>
         <p className="text-muted-foreground">
           <div
@@ -95,30 +132,34 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
           <span className="ml-1 font-medium">{recipe.rating.toFixed(1)}</span>
         </div>
         <div className="flex justify-center items-center gap-2">
-        <div className="flex items-center">
-          <ThumbsUp className="w-5 h-5 text-blue-500" />
-          <span className="ml-1 font-medium">{recipe.likes} likes</span>
-        </div>
-        <div className="flex items-center">
-          <ThumbsDown className="w-5 h-5 text-blue-500" />
-          <span className="ml-1 font-medium">{recipe.likes} likes</span>
-        </div>
+          <div className="flex items-center">
+            <ThumbsUp className="w-5 h-5 text-blue-500" />
+            <span className="ml-1 font-medium">{recipe.likes} likes</span>
+          </div>
+          <div className="flex items-center">
+            <ThumbsDown className="w-5 h-5 text-blue-500" />
+            <span className="ml-1 font-medium">{recipe.likes} likes</span>
+          </div>
         </div>
       </div>
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Comments</h2>
-        {recipe.comments.map((comment, index) => (
-          <Card key={index} className="bg-gray-50">
+        {allComment?.data.map((comment: any) => (
+          <Card key={comment?._id} className="bg-gray-50">
             <CardContent className="p-4">
               <div className="flex items-start space-x-4">
-                <Avatar>
-                  <AvatarFallback>{comment.author[0]}</AvatarFallback>
-                </Avatar>
+                <Image
+                  src={comment?.userId?.image}
+                  alt={comment?.userId?.name}
+                  width={50}
+                  height={50}
+                  className="rounded-md mb-4"
+                />
                 <div className="space-y-1">
-                  <p className="font-medium">{comment.author}</p>
+                  <p className="font-medium">{comment?.title}</p>
                   <p className="text-sm text-muted-foreground">
-                    {comment.text}
+                    {comment?.comment}
                   </p>
                 </div>
               </div>
@@ -127,12 +168,29 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
         ))}
         <Card>
           <CardContent className="p-4">
-            <form className="space-y-4">
-              <Textarea placeholder="Add a comment..." />
-              <Button type="submit">
-                <Send className="w-4 h-4 mr-2" />
-                Post Comment
-              </Button>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+              <Textarea
+                placeholder="Add a comment..."
+                {...register("comment")}
+              />
+              {commenting ? (
+                <Button
+                  type="button"
+                  className="bg-[#b1cee0] text-gray-700 ..."
+                  disabled
+                >
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3 ..."
+                    viewBox="0 0 24 24"
+                  ></svg>
+                  commenting...
+                </Button>
+              ) : (
+                <Button type="submit" className="bg-[#b1cee0] text-gray-700">
+                  <Send className="w-4 h-4 mr-2" />
+                  Post Comment
+                </Button>
+              )}
             </form>
           </CardContent>
         </Card>
