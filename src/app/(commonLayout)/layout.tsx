@@ -1,12 +1,16 @@
 import Navbar from "@/components/common/Navbar";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
+import Loading from "../loading";
 
 const CommonLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="container mx-auto min-h-screen dark:text-white text-black dark:bg-black">
+    <Suspense fallback={<Loading />}>
+<div className="container mx-auto min-h-screen dark:text-white text-black dark:bg-black">
       <Navbar />
       {children}
     </div>
+    </Suspense>
+    
   );
 };
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ export default function LoginForm() {
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
 
-  // Select user info from Redux store with type safety
+  const [loginStatus,setLoginStatus] = useState(false)
  
 
   const form = useForm({
@@ -86,6 +86,10 @@ export default function LoginForm() {
         const error = res.error as TResError;
         console.log(res?.error);
         toast((error.data?.message as string) || "Something went wrong");
+        if (error.data?.message == "Password Incorrect!") {
+          setLoginStatus(true)
+          
+        }
       }
 
       if (res?.data?.success) {
@@ -93,7 +97,7 @@ export default function LoginForm() {
         toast("Login successful");
       }
     } catch (err) {
-      console.log(err);
+      console.log(err,'96');
     }
   };
   const check = async () => {
@@ -142,14 +146,21 @@ export default function LoginForm() {
         </form>
       </Form>
       <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-      {/* Google login btn */}
-      {/* <GoogleLoginBtn /> */}
       <div className="flex   justify-center pt-3  gap-2">
         <p>Don&apos;t have account </p>{" "}
         <Link href={"/sign-up"}>
           <p className="text-blue-500 font-bold hover:underline">SignUp</p>{" "}
         </Link>
       </div>
+      {
+        true && <div className="flex   justify-center pt-3  gap-2">
+        <p>Don&apos;t remember password </p>{" "}
+        <Link href={"/forget-password"}>
+          <p className="text-blue-500 font-bold hover:underline">Forget Password</p>{" "}
+        </Link>
+      </div>
+      }
+      
     </div>
   );
 }

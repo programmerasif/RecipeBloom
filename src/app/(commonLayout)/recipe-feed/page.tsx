@@ -34,7 +34,6 @@ export default function RecipeFeed() {
   const fetchItems = (recipe: any) => {
     if (!recipe) return;
 
-    // Check if there's new data
     if (recipe?.length > 0) {
       setItems((prevItems) => [...prevItems, ...recipe]);
       setHasMore(true);
@@ -54,7 +53,7 @@ export default function RecipeFeed() {
     }
   }, [data]);
 
-  const handelPrivate = (isPremium, event) => {
+  const handelPrivate = (isPremium:boolean, event:any) => {
     if (isPremium && !isPremiumUser) {
       event.preventDefault();
       Swal.fire({
@@ -147,7 +146,7 @@ export default function RecipeFeed() {
                   </Link>
                   <CardFooter className="flex justify-between w-full">
                     {/* up vote and down vote */}
-                    <Vote id={post?._id} />
+                    <Vote recipeId={post?._id} initialLikes={post?.likes} initialDislikes={post?.disLikes}/>
                   </CardFooter>
                 </Card>
               ))}

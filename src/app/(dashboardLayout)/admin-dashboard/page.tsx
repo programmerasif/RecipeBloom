@@ -41,7 +41,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ link, onClick }) => {
 
 const AdminMainDashboard = () => {
   const user = useSelector((state: RootState) => state.user);
-  console.log(user);
+
 
   const sideBrLinks = [
     {
@@ -52,7 +52,14 @@ const AdminMainDashboard = () => {
       ),
       component: "Home",
     },
-
+    {
+      label: "Profile",
+      href: "#",
+      icon: (
+        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+      component: "Profile",
+    },
     {
       label: "Manage User",
       href: "#",

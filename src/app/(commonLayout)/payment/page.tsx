@@ -35,25 +35,25 @@ const PremiumMembershipPage = () => {
     const url = `https://recipe-bloom-backend.vercel.app/api/v1/users/promote-premium/${_id}`;
     try {
       const response = await fetch(url, {
-        method: "PATCH", // Specify the request method
+        method: "PATCH", 
         headers: {
-          "Content-Type": "application/json", // Specify the content type
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: "update" }), // Convert data to JSON string
+        body: JSON.stringify({ status: "update" }), 
       });
 
-      // Check if the response is ok (status in the range 200-299)
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
 
-      const result = await response.json(); // Parse the JSON response
+      const result = await response.json();
       console.log("Data patched successfully:", result);
       if (result?.success) {
         const paymentUrl = result?.data?.payment_url;
         setLoading(false);
         if (paymentUrl) {
-          // Navigate to the payment link in the same tab
+          console.log(paymentUrl);
+          
           window.location.href = paymentUrl;
           setIsPremium(true);
           dispatch(setIsPremiumMembership(true));

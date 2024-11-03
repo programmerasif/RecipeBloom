@@ -13,18 +13,16 @@ import { useAppSelector } from "@/lib/hooks";
 import { useCreateRecipeMutation } from "@/redux/api/features/recipe/recipe";
 import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import dynamic from "next/dynamic"; // Import dynamic for ReactQuill
+import dynamic from "next/dynamic"; 
 import "react-quill/dist/quill.snow.css";
 import Swal from "sweetalert2";
 
-// Dynamically import ReactQuill with SSR disabled
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const AddNewRecipe = () => {
   const [isimgUpload, setImgUpload] = useState(false);
   const [addRecipe] = useCreateRecipeMutation();
   const { _id } = useAppSelector((state) => state.user);
-  
 
   const {
     register,
@@ -69,11 +67,10 @@ const AddNewRecipe = () => {
       if (data.recipeImage && data.recipeImage.length > 0) {
         const formData = new FormData();
         setImgUpload(true);
-        formData.append("image", data.recipeImage[0]); // Assumes the image is in data.recipeImage[0]
+        formData.append("image", data.recipeImage[0]);
 
-        // Use fetch to upload the image to imgbb
         const response = await fetch(
-          `https://api.imgbb.com/1/upload?key=27bd3f8b458a866a837ae2d474b63c50`, // Replace with your imgbb API key
+          `https://api.imgbb.com/1/upload?key=27bd3f8b458a866a837ae2d474b63c50`, 
           {
             method: "POST",
             body: formData,
@@ -84,9 +81,7 @@ const AddNewRecipe = () => {
 
         if (result.success) {
           setImgUpload(false);
-          // If upload is successful, get the URL of the image
           const imageUrl = result.data.url;
-          // Now include the uploaded image URL in the data object
           const updatedData = {
             ...data,
             recipeImage: imageUrl,
@@ -98,17 +93,15 @@ const AddNewRecipe = () => {
             description: data?.content,
           };
           await addRecipe(updatedData);
-        
-        
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Recipe has been saved",
-              showConfirmButton: false,
-              timer: 1500
-            });
-      
           
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Recipe has been saved",
+            showConfirmButton: false,
+            timer: 1500,
+          });
 
           reset(); // Automatically reset the form after submission
         } else {
@@ -172,7 +165,9 @@ const AddNewRecipe = () => {
                 </SelectContent>
               </Select>
               {errors.category && (
-                <p className="text-red-500 text-sm">{errors.category.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.category.message}
+                </p>
               )}
             </div>
 
@@ -259,19 +254,28 @@ const AddNewRecipe = () => {
             </div>
 
             {/* Content Field */}
-            <div className="space-y-2 h-32">
+            <div className="space-y-2 min-h-32">
               <Label htmlFor="content">Content</Label>
               <ReactQuill
                 value={watch("content")}
                 onChange={handleContentChange}
                 theme="snow"
-                className="h-20"
+                className="h-24"
               />
               {errors.content && (
                 <p className="text-red-500 text-sm">{errors.content.message}</p>
               )}
             </div>
-
+            <div className="flex items-center space-x-2 pt-10">
+              <input
+                type="checkbox"
+                {...register("isPremium")}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label htmlFor="isPremium" className="text-gray-700">
+                Is Premium Recipe (optional)
+              </label>
+            </div>
             {/* Submit Button */}
             <div className="mt-52">
               <Button

@@ -3,20 +3,7 @@ import { baseApi } from "../../baseApi";
 
 const recipeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // getProductsForBooking: builder.query({
-    //   query: (query) => {
-    //     if (query?.search) {
-    //       return `/facility??searchTerm=${query?.search}&page=${query.page}&limit=${query.limit}`;
-    //     } else if (query?.filter) {
-    //       `/facility??category=${query?.filter}&page=${query.page}&limit=${query.limit}`;
-    //     } else if (query?.back) {
-    //       `/facility??page=${query.page}&limit=${query.limit}`;
-    //     } else if (query.all) {
-    //       return "/facility?";
-    //     }
-    //     return `/facility??page=${query.page}&limit=${query.limit}`;
-    //   },
-    // }),
+   
     getUserRecipes: builder.query({
       query: (data) => {
         const { query, id } = data;
@@ -51,6 +38,24 @@ const recipeApi = baseApi.injectEndpoints({
           url: `/comment`,
           method: "post",
 
+          body: data,
+        };
+      },
+    }),
+    giveLike: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/comment/like`,
+          method: "post",
+          body: data,
+        };
+      },
+    }),
+    givedislike: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/comment/dislike`,
+          method: "post",
           body: data,
         };
       },
@@ -100,5 +105,7 @@ export const {
   useGetUserFeedRecipesQuery,
   useGetSingleRecipeQuery,
   useCommentsMutation,
-  useGetCommentsQuery
+  useGetCommentsQuery,
+  useGiveLikeMutation,
+  useGivedislikeMutation
 } = recipeApi;

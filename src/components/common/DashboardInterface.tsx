@@ -4,6 +4,7 @@ import ManageUser from "../ManageUser/ManageUser";
 import MyRecipes from "../MyRecipes/MyRecipes";
 import AddNewRecipe from "./AddNewRecipe/AddNewRecipe";
 import LogoutContent from "./LogoutContent/LogoutContent";
+import UserProfile from "./Profile/Profile";
 
 const DashboardInterface = ({
   activeComponent,
@@ -20,6 +21,7 @@ const DashboardInterface = ({
       {/* {activeComponent === "AdminSettings" && <AdminSettingsContent />} */}
       {activeComponent === "MyRecipes" && <MyRecipes />}
       {activeComponent === "AddNewRecipe" && <AddNewRecipe />}
+      {activeComponent === "Profile" && <UserProfile />}
     </div>
   );
 };

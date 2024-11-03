@@ -99,6 +99,44 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    forgetPassword: builder.mutation({
+      query: (data) => {
+        const email = { email: data };
+
+        return {
+          url: "/auth/forget-password",
+          method: "POST",
+          body: email,
+        };
+      },
+    }),
+    updateUserInfo: builder.mutation({
+      query: (data) => {
+        console.log(data);
+
+        return {
+          url: `/users/${data?._id}`,
+          method: "PATCH",
+          body: data?.formData,
+        };
+      },
+    }),
+    getFollowers: builder.query({
+      query: (_id) => {
+        return {
+          url: `/users/followers/${_id}`,
+          method: "get",
+        };
+      },
+    }),
+    getFollowing: builder.query({
+      query: (_id) => {
+        return {
+          url: `/users/following/${_id}`,
+          method: "get",
+        };
+      },
+    }),
   }),
 });
 export const {
@@ -113,5 +151,9 @@ export const {
   useGetUsersStatusQuery,
   useFollowUserMutation,
   useUnFollowUserMutation,
-  useGetSingleUserQuery
+  useGetSingleUserQuery,
+  useForgetPasswordMutation,
+  useUpdateUserInfoMutation,
+  useGetFollowersQuery,
+  useGetFollowingQuery
 } = authApi;
