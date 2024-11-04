@@ -5,6 +5,7 @@ import MyRecipes from "../MyRecipes/MyRecipes";
 import AddNewRecipe from "./AddNewRecipe/AddNewRecipe";
 import LogoutContent from "./LogoutContent/LogoutContent";
 import UserProfile from "./Profile/Profile";
+import UpdatePass from "./UpdatePass/UpdatePass";
 
 const DashboardInterface = ({
   activeComponent,
@@ -22,6 +23,7 @@ const DashboardInterface = ({
       {activeComponent === "MyRecipes" && <MyRecipes />}
       {activeComponent === "AddNewRecipe" && <AddNewRecipe />}
       {activeComponent === "Profile" && <UserProfile />}
+      {activeComponent === "UpdatePass" && <UpdatePass />}
     </div>
   );
 };

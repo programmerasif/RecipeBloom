@@ -42,7 +42,7 @@ console.log(res);
 
   return (
     <div className="container mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-4">Followers List</h1>
+     <h1 className="text-2xl font-bold mb-4">{`Total followers ${followers?.data?.length} person`}</h1>
       <div className="border rounded-lg overflow-hidden">
       {
             followers?.data?.length < 1 ? (<div className="flex flex-col justify-center items-center h-[60vh] w-full"><File /><span>followers not available</span> </div>): (

@@ -104,7 +104,7 @@ export default function UserProfile() {
           <Card className="w-full ">
             <CardContent className="space-y-2 w-full ">
               <div className=" w-full mx-auto space-y-6 p-20">
-                <div></div>
+               
                 <form
                   onSubmit={handleSubmit(onSubmit)}
                   className="w-full drop-shadow-md"
@@ -173,6 +173,7 @@ export default function UserProfile() {
                         {isLoading ? "Changing..." : "Save Changes"}
                       </button>
                     </div>
+                    <hr  className="mt-20"/>
                   </div>
                 </form>
                 <div className="flex flex-col justify-start items-start gap-2 w-1/2"></div>

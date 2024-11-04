@@ -110,6 +110,16 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updatePassword: builder.mutation({
+      query: (data) => {
+
+        return {
+          url: "/users/updatePass",
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
     updateUserInfo: builder.mutation({
       query: (data) => {
         console.log(data);
@@ -155,5 +165,6 @@ export const {
   useForgetPasswordMutation,
   useUpdateUserInfoMutation,
   useGetFollowersQuery,
-  useGetFollowingQuery
+  useGetFollowingQuery,
+  useUpdatePasswordMutation
 } = authApi;

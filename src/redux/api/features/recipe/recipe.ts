@@ -3,11 +3,10 @@ import { baseApi } from "../../baseApi";
 
 const recipeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-   
     getUserRecipes: builder.query({
       query: (data) => {
         const { query, id } = data;
-      
+
         if (query?.search) {
           return `/recipe/user/${id}?searchTerm=${query?.search}&page=${query.page}&limit=1`;
         }
@@ -38,6 +37,24 @@ const recipeApi = baseApi.injectEndpoints({
           url: `/comment`,
           method: "post",
 
+          body: data,
+        };
+      },
+    }),
+    updateComment: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/comment/updateComment`,
+          method: "PATCH",
+          body: data,
+        };
+      },
+    }),
+    deleteComment: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/comment/deleteComment`,
+          method: "DELETE",
           body: data,
         };
       },
@@ -107,5 +124,7 @@ export const {
   useCommentsMutation,
   useGetCommentsQuery,
   useGiveLikeMutation,
-  useGivedislikeMutation
+  useGivedislikeMutation,
+  useUpdateCommentMutation,
+  useDeleteCommentMutation
 } = recipeApi;

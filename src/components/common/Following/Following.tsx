@@ -39,7 +39,7 @@ const Following = () => {
 
   return (
     <div className="container mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-4">following List</h1>
+      <h1 className="text-2xl font-bold mb-4">{`Total following ${following?.data?.length} person`}</h1>
       <div className="border rounded-lg overflow-hidden">
         {following?.data?.length < 1 ? (
           <div className="flex flex-col justify-center items-center h-[60vh] w-full">
