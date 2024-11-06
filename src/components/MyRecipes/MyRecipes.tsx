@@ -130,7 +130,7 @@ const MyRecipes = () => {
       <div className="flex sm:flex-col md:flex-row justify-between items-center mb-10 border rounded-md p-2">
         <div className="lg:text-2xl font-semibold text-gray-700 flex justify-center items-center gap-2">
           <span className="text-[#12143D]">
-            Facility <span className="text-[#F7A400] ps-2"> Management</span>
+            My <span className="text-[#78b0d3] ps-2"> Recipes</span>
           </span>
           <span>
             <svg
@@ -139,7 +139,7 @@ const MyRecipes = () => {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="size-6 text-[#F7A400]"
+              className="size-6 text-[#b4dffa]"
             >
               <path
                 strokeLinecap="round"
@@ -149,7 +149,7 @@ const MyRecipes = () => {
             </svg>
           </span>
         </div>
-        <button className="p-2 bg-[#dbe8f0] rounded-md ">
+        <button className="p-2 bg-[#b4dffa] rounded-md ">
           {/* <AddModal /> */}
         </button>
       </div>
@@ -169,7 +169,7 @@ const MyRecipes = () => {
                 {...register("search")} // Register search input with react-hook-form
               />
             </div>
-            <Button type="submit" className="ml-2">
+            <Button type="submit" className="ml-2 bg-[#b4dffa] text-black">
               Search
             </Button>
           </div>

@@ -103,6 +103,17 @@ const recipeApi = baseApi.injectEndpoints({
         };
       },
     }),
+    giveRatings: builder.mutation({
+      query: (data) => {
+        console.log(data?.rating);
+        
+        return {
+          url: `/recipe/rating/${data?.id}`,
+          method: "PATCH",
+          body:data?.rating
+        };
+      },
+    }),
     getSingleRecipe: builder.query({
       query: (id) => {
         return {
@@ -126,5 +137,6 @@ export const {
   useGiveLikeMutation,
   useGivedislikeMutation,
   useUpdateCommentMutation,
-  useDeleteCommentMutation
+  useDeleteCommentMutation,
+  useGiveRatingsMutation
 } = recipeApi;

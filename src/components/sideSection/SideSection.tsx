@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Check,  StarsIcon } from "lucide-react";
+import { Check,  Crown,  Star,  StarsIcon } from "lucide-react";
 import Image from "next/image";
 import { useAppSelector } from "@/lib/hooks";
 import premiumLogo from "../../assets/premium.png";
@@ -17,11 +17,14 @@ import {
   useGetUsersStatusQuery,
   useUnFollowUserMutation,
 } from "@/redux/api/features/auth/authApi";
+import { Badge } from "../ui/badge";
+import { useRouter } from "next/navigation";
+import PremiumCart from "./PremiumCart";
 
 const SideSection = () => {
-
-  const [followUser,{isLoading:isFollowLoding}] = useFollowUserMutation();
-  const [unFollowUser,{isLoading:isUnfollowLoding}] = useUnFollowUserMutation();
+  const router = useRouter();
+  const [followUser] = useFollowUserMutation();
+  const [unFollowUser] = useUnFollowUserMutation();
   const { _id, email } = useAppSelector((state) => state.user);
   const { data: userStatus ,isLoading:userStatusLoading} = useGetUsersStatusQuery({
     pollingInterval: 1000,
@@ -39,49 +42,10 @@ const SideSection = () => {
   const handelUnFollow = async (id: string) => {
     await unFollowUser({ userId: _id, targetUserId: id });
   };
+  
   return (
     <div className="sticky top-20 h-[calc(100vh-5rem)] ">
-      <Card className=" bg-[#ebf5fb]  drop-shadow-xl ">
-        <div className="flex justify-between ">
-          <div>
-            
-            <CardHeader>
-              <CardTitle>Plan Details</CardTitle>
-              <CardDescription>
-                Features included in your selected plan
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {[
-                  "Access to basic recipes",
-                  "Weekly newsletter",
-                  "Community forum access",
-                ].map((feature, index) => (
-                  <li key={index} className="flex items-center">
-                    <Check className="mr-2 h-4 w-4 text-green-500" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </div>
-          <div className="flex justify-center items-center px-10">
-            <Image
-              src={premiumLogo}
-              alt="premium logo"
-              width={200}
-              height={200}
-              className=" rounded-md"
-            />
-          </div>
-        </div>
-        <div className="w-full p-8" >
-          <button className="w-full flex justify-center items-center bg-[#b1cee0] drop-shadow-xl text-center rounded-md text-black font-semibold py-3 hover:bg-[#b1cee0a9] duration-300">
-         {isPremium ? <div className="flex justify-center items-center"><StarsIcon className="mr-2 h-5 w-5" /> <span>Premium user</span></div> : <div><StarsIcon className="mr-2 h-5 w-5" /> <span>Subscribe Now</span></div>}
-          </button>
-        </div>
-      </Card>
+     <PremiumCart isPremium={isPremium}/>
       {
       userStatusLoading ? <div className="w-[785px] h-[350px] bg-gray-300 animate-pulse rounded-md mt-5"></div> :<>
       <div className="bg-[#ebf5fb]  drop-shadow-xl min-h-[52vh] mt-5">
@@ -109,9 +73,17 @@ const SideSection = () => {
                       <small className="text-xs">{item?.email}</small>
                     </span>
                   </div>
-                  <div className="bg-gradient-to-r from-cyan-400 to-blue-400 text-white px-2 py-1 rounded-full">
-                    {item?.isPremium ? "Premium" : "Regular"}
-                  </div>
+                
+                  {
+                    item?.isPremium? (<Badge variant="default" className="bg-yellow-500 hover:bg-yellow-600">
+                      <Crown className="h-3 w-3 mr-1" />
+                      Premium
+                    </Badge>) : <Badge variant="default" className="bg-[#b1cee0] hover:bg-yellow-600">
+                      <Star className="h-3 w-3 mr-1" />
+                      Regular
+                    </Badge>
+                  }
+                   
                   <div className="xl:flex justify-center items-center gap-1 hidden">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +115,7 @@ const SideSection = () => {
                   onClick={() => handelUnFollow(item._id)}
                 >
                  {
-                  isUnfollowLoding ? "loading" :  <span className="text-sm cursor-pointer">
+                   <span className="text-sm cursor-pointer">
                   Following
                 </span>
                  }
@@ -172,7 +144,7 @@ const SideSection = () => {
                   onClick={() => handelFollow(item._id)}
                 >
                   {
-                  isFollowLoding ? "loading" :  <span className="text-sm cursor-pointer">
+                   <span className="text-sm cursor-pointer">
                   Follow
                 </span>
                  }

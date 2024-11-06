@@ -53,7 +53,7 @@ export default function RecipeFeed() {
     }
   }, [data]);
 
-  const handelPrivate = (isPremium:boolean, event:any) => {
+  const handelPrivate = (isPremium: boolean, event: any) => {
     if (isPremium && !isPremiumUser) {
       event.preventDefault();
       Swal.fire({
@@ -63,12 +63,12 @@ export default function RecipeFeed() {
         showCancelButton: true,
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, I want!",
-        confirmButtonColor:"#3085d6",
+        confirmButtonColor: "#3085d6",
       }).then((result) => {
         if (result.isConfirmed) {
           router.push("/payment");
         }
-      });;
+      });
       console.log("Navigation prevented for non-premium user.");
     } else {
       console.log("Premium user, navigation allowed.");
@@ -92,64 +92,80 @@ export default function RecipeFeed() {
             endMessage={<p>No more items</p>}
           >
             <div className="grid grid-cols-1 gap-4">
-              {items.map((post) => (
-                <Card className="drop-shadow-lg" key={post._id}>
-                  <Link
-                    href={`/recipe-feed/${post?._id}`}
-                    key={post._id}
-                    onClick={(event) => handelPrivate(post?.isPremium, event)}
-                    scroll={false}
-                  >
-                    <CardHeader className="">
-                    <div className="flex justify-between items-center">
-                    <div className="flex items-center  space-x-4">
-                        <Avatar>
-                          <AvatarImage
-                            src={post?.user?.image}
-                            alt={post.author}
-                          />
-                          <AvatarFallback>{}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <h3 className="text-lg font-semibold">{post.name}</h3>
-                          <p className="text-sm text-gray-500">
-                            by {post?.user?.name}
-                          </p>
+              {items.map((post) => {
+                const description = post?.description.slice(0, 300);
+                return (
+                  <Card className="drop-shadow-lg" key={post._id}>
+                    <Link
+                      href={`/recipe-feed/${post?._id}`}
+                      key={post._id}
+                      onClick={(event) => handelPrivate(post?.isPremium, event)}
+                      scroll={false}
+                    >
+                      <CardHeader className="">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center  space-x-4">
+                            <Avatar>
+                              <AvatarImage
+                                src={post?.user?.image}
+                                alt={post.author}
+                              />
+                              <AvatarFallback>{}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h3 className="text-lg font-semibold">
+                                {post.name}
+                              </h3>
+                              <p className="text-sm text-gray-500">
+                                by {post?.user?.name}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="">
+                            {post?.isPremium ? (
+                              <div className="flex justify-center items-center bg-[#b1cee0] px-3 py-2 rounded-full font-semibold text-xs">
+                                <StarsIcon className="mr-2 h-5 w-5" />{" "}
+                                <span>Premium</span>{" "}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
-                      </div>
-                  <div className="">
-                    {
-                      post?.isPremium ? <div className="flex justify-center items-center bg-[#b1cee0] px-3 py-2 rounded-full font-semibold text-xs"><StarsIcon className="mr-2 h-5 w-5" /> <span>Premium</span> </div> : ""
-                    }
-                  </div>
-                    </div>
-                    </CardHeader>
-                    <CardContent>
-                      <Image
-                        src={post?.recipeImage}
-                        alt={post.name}
-                        width={400}
-                        height={400}
-                        className="w-full h-56 sm:h-64 object-cover rounded-md mb-4"
+                      </CardHeader>
+                      <CardContent>
+                        <Image
+                          src={post?.recipeImage}
+                          alt={post.name}
+                          width={400}
+                          height={400}
+                          className="w-full h-56 sm:h-64 object-cover rounded-md mb-4"
+                        />
+                        <p>{post.content}</p>
+                        <p className="text-sm text-gray-500 mt-2">
+                          Category: {post?.foodCategory}
+                        </p>
+                        {/* Render the description as HTML */}
+                        <div
+                          className=""
+                          dangerouslySetInnerHTML={{
+                            __html: description,
+                          }}
+                        ></div>
+                      </CardContent>
+                    </Link>
+                    <CardFooter className="flex justify-between w-full">
+                      {/* up vote and down vote */}
+                      <Vote
+                        recipeId={post?._id}
+                        initialLikes={post?.likes}
+                        initialDislikes={post?.disLikes}
+                        initialcomments={post?.comments}
                       />
-                      <p>{post.content}</p>
-                      <p className="text-sm text-gray-500 mt-2">
-                        Category: {post?.foodCategory}
-                      </p>
-                      {/* Render the description as HTML */}
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: post?.description,
-                        }}
-                      ></div>
-                    </CardContent>
-                  </Link>
-                  <CardFooter className="flex justify-between w-full">
-                    {/* up vote and down vote */}
-                    <Vote recipeId={post?._id} initialLikes={post?.likes} initialDislikes={post?.disLikes}/>
-                  </CardFooter>
-                </Card>
-              ))}
+                    </CardFooter>
+                  </Card>
+                );
+              })}
             </div>
           </InfiniteScroll>
         </div>

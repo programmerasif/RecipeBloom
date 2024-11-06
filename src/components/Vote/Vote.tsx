@@ -14,8 +14,9 @@ interface VoteProps {
   recipeId: string;
   initialLikes: string[];
   initialDislikes: string[];
+  initialcomments: string[];
 }
-const Vote = ({ recipeId, initialLikes, initialDislikes }:VoteProps) => {
+const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VoteProps) => {
   const [dislikeToggle] = useGivedislikeMutation();
   const [likeToggle] = useGiveLikeMutation();
   const { _id } = useAppSelector((state) => state.user);
@@ -57,8 +58,8 @@ const Vote = ({ recipeId, initialLikes, initialDislikes }:VoteProps) => {
           <span>{like?.length}</span>
         </Button>
 
-        <Link href={`/recipe-feed/${_id?.id}`}>
-          <Button variant="outline" size="icon" aria-label="Downvote" >
+        <Link href={`/recipe-feed/${_id?.id}`} >
+          <Button variant="outline" size="icon" aria-label="Downvote" className="rounded-full p-1 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -73,7 +74,7 @@ const Vote = ({ recipeId, initialLikes, initialDislikes }:VoteProps) => {
             >
               <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
             </svg>
-            
+            {initialcomments.length}
           </Button>
         </Link>
 

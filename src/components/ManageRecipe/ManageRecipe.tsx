@@ -127,7 +127,7 @@ const ManageRecipe = () => {
       <div className="flex sm:flex-col md:flex-row justify-between items-center mb-10 border rounded-md p-2">
         <div className="lg:text-2xl font-semibold text-gray-700 flex justify-center items-center gap-2">
           <span className="text-[#12143D]">
-            Facility <span className="text-[#F7A400] ps-2"> Management</span>
+            Recipe <span className="text-[#7aaccc] ps-2"> Management</span>
           </span>
           <span>
             <svg
@@ -136,7 +136,7 @@ const ManageRecipe = () => {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="size-6 text-[#F7A400]"
+              className="size-6 text-[#7aaccc]"
             >
               <path
                 strokeLinecap="round"

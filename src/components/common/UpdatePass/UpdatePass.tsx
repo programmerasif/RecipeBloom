@@ -37,7 +37,29 @@ const UpdatePass = () => {
   };
   return (
     <div className="w-full">
-      <h5 className="font-bold text-2xl w-full">user-dashboard/update-password</h5>
+      <div className="flex justify-start items-start w-full border">
+       <div className="lg:text-2xl font-semibold text-gray-700 flex justify-center items-center gap-2 px-10 py-2">
+          <span className="text-[#12143D]">
+          Update <span className="text-[#7aaccc] ps-2"> password</span>
+          </span>
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="size-6 text-[#7aaccc]"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </span>
+        </div>
+       </div>
       <div className="p-10 w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-start items-start gap-5 w-full">
           <div className="w-full">

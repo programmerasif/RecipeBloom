@@ -21,6 +21,7 @@ import {
   useDeleteCommentMutation,
   useGetCommentsQuery,
   useGetSingleRecipeQuery,
+  useGiveRatingsMutation,
   useUpdateCommentMutation,
 } from "@/redux/api/features/recipe/recipe";
 import { useForm } from "react-hook-form";
@@ -28,14 +29,23 @@ import { useAppSelector } from "@/lib/hooks";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Swal from "sweetalert2";
+import ReactStars from "react-rating-stars-component";
 
 type FormData = {
   comment: string;
 };
 
 function DetailRecipe({ params }: { params: { recipeId: string } }) {
+  const [rating, setRating] = useState(1.5);
+  const [avgRating, setAvgRating] = useState(null);
+
   const router = useRouter();
   const { data, isLoading } = useGetSingleRecipeQuery(params?.recipeId);
   const [giveComment, { isLoading: commenting }] = useCommentsMutation();
@@ -44,42 +54,11 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
   });
   const { register, handleSubmit, reset } = useForm<FormData>();
   const { _id, name } = useAppSelector((state) => state.user);
-  const [updateComment,{isLoading:commentLoading}]  = useUpdateCommentMutation()
-  const [deleteComment]  = useDeleteCommentMutation()
+  const [updateComment, { isLoading: commentLoading }] =
+    useUpdateCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
   const [openUpdate, setOpenUpdate] = useState(false);
-
-  const recipe = {
-    title: "Delicious Homemade Pizza",
-    author: "Jane Doe",
-    image: "/placeholder.svg?height=400&width=800",
-    description:
-      "A mouthwatering homemade pizza with a crispy crust and your favorite toppings.",
-    category: "Italian",
-    readyIn: "45 minutes",
-    ingredients: [
-      "2 1/4 cups all-purpose flour",
-      "1 tsp salt",
-      "1 tsp sugar",
-      "1 packet instant yeast",
-      "2 tbsp olive oil",
-      "3/4 cup warm water",
-      "1/4 cup tomato sauce",
-      "1 cup mozzarella cheese",
-      "Toppings of your choice",
-    ],
-    rating: 4.5,
-    likes: 127,
-    comments: [
-      {
-        author: "John Smith",
-        text: "This recipe is amazing! My family loved it.",
-      },
-      {
-        author: "Emily Brown",
-        text: "I added some extra garlic and it was perfect!",
-      },
-    ],
-  };
+  const [giveRatings] = useGiveRatingsMutation();
 
   const onSubmit = async (data: FormData) => {
     const comment = {
@@ -93,48 +72,74 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
   };
   const inputRef = useRef(null);
 
-  const handleUpdate = async(commentId:string) => {
+  const handleUpdate = async (commentId: string) => {
     const inputValue = inputRef?.current?.value;
-   const res = await updateComment({commentId,updateText:inputValue})
-   if (res?.data) {
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "comment update successful",
-      showConfirmButton: false,
-      timer: 1500
-    });
-   }
-   
-  };
-
-  const handelDelete = async (commentId:string) =>{
-
-
-
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then(async(result) => {
-    if (result.isConfirmed) {
-      await deleteComment({commentId})
+    const res = await updateComment({ commentId, updateText: inputValue });
+    if (res?.data) {
       Swal.fire({
         position: "center",
         icon: "success",
-        title: "comment updelete successful",
+        title: "comment update successful",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
     }
-  });
- 
+  };
 
-  }
+  const handelDelete = async (commentId: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteComment({ commentId });
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "comment updelete successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
+  const ratingChanged = (newRating: any) => {
+    setRating(newRating);
+  };
+
+  // Function to handle button click
+  const handleSubmitRating = async () => {
+    const res = await giveRatings({
+      id: data?.data?._id,
+      rating: { userId: _id, ratingNumber: rating },
+    });
+
+    setAvgRating(res?.data?.data?.totalAverageRating);
+
+    if (res?.error?.data?.message == "Rating from this user already exists.") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Thanks you already given ratings",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+    if (res?.data) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Thanks for give  ratings",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-8 pt-24">
       <div className="space-y-4">
@@ -143,14 +148,14 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
         ) : (
           <Image
             src={data?.data?.recipeImage}
-            alt={recipe.title}
+            alt={"recipe.title"}
             width={800}
             height={400}
             className="w-full h-[400px] object-cover rounded-lg"
           />
         )}
 
-        <h1 className="text-3xl font-bold">{recipe.title}</h1>
+        <h1 className="text-3xl font-bold">{data?.data?.name}</h1>
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <span>By {data?.data?.user?.name}</span>
           <span>•</span>
@@ -164,9 +169,9 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
         <div>
           <span className="font-semibold mb-2"> Ingredients</span>
           <div className="flex flex-wrap justify-start items-center gap-2">
-            {recipe.ingredients.map((ingredient, index) => (
+            {data?.data?.ingredients.map((ingredient: any, index: number) => (
               <span key={index} className="px-3 py-1 border-2">
-                {ingredient}
+                {ingredient?.name}
               </span>
             ))}
           </div>
@@ -183,16 +188,22 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
           <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-          <span className="ml-1 font-medium">{recipe.rating.toFixed(1)}</span>
+          <span className="ml-1 font-medium">
+            {avgRating ? avgRating : data?.data?.totalAverageRating?.toFixed(1)}{" "}
+          </span>
         </div>
         <div className="flex justify-center items-center gap-2">
           <div className="flex items-center">
             <ThumbsUp className="w-5 h-5 text-blue-500" />
-            <span className="ml-1 font-medium">{recipe.likes} likes</span>
+            <span className="ml-1 font-medium">
+              {data?.data?.likes?.length} likes
+            </span>
           </div>
           <div className="flex items-center">
             <ThumbsDown className="w-5 h-5 text-blue-500" />
-            <span className="ml-1 font-medium">{recipe.likes} likes</span>
+            <span className="ml-1 font-medium">
+              {data?.data?.disLikes?.length} likes
+            </span>
           </div>
         </div>
       </div>
@@ -201,8 +212,6 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
         <h2 className="text-xl font-semibold">Comments</h2>
 
         {allComment?.data.map((comment: any) => {
-          console.log(comment);
-
           return comment?.userId?._id !== _id ? (
             <Card key={comment?._id} className="bg-gray-50">
               <CardContent className="p-4">
@@ -246,32 +255,32 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
                   className={`max-w-xl flex justify-center items-center gap-2 `}
                 >
                   <span onClick={() => setOpenUpdate(!openUpdate)}>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline">
+                          <Edit />
+                        </Button>
+                      </DialogTrigger>
 
-                  <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline"><Edit /></Button>
-                  </DialogTrigger>
-                  
-                  <DialogContent className="sm:max-w-[425px] ">
-                    <div className="font-semibold text-center mx-auto">Update Comment</div>
-                    <form
-                      className={`max-w-xl flex flex-col justify-center items-center gap-4 m-4`}
-                      onSubmit={(e) => e.preventDefault()}
-                    >
-                      <Input type="text" ref={inputRef} className=""/>
-                      <Button
-                        size="sm"
-                        onClick={() => handleUpdate(comment?._id)}
-                        className="text-sm"
-                      >
-                        {
-                          commentLoading ? "Updating" : "Update"
-                        }
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-                    
+                      <DialogContent className="sm:max-w-[425px] ">
+                        <div className="font-semibold text-center mx-auto">
+                          Update Comment
+                        </div>
+                        <form
+                          className={`max-w-xl flex flex-col justify-center items-center gap-4 m-4`}
+                          onSubmit={(e) => e.preventDefault()}
+                        >
+                          <Input type="text" ref={inputRef} className="" />
+                          <Button
+                            size="sm"
+                            onClick={() => handleUpdate(comment?._id)}
+                            className="text-sm"
+                          >
+                            {commentLoading ? "Updating" : "Update"}
+                          </Button>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
                   </span>
                   <span onClick={() => handelDelete(comment?._id)}>
                     <Delete />
@@ -282,8 +291,11 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
           );
         })}
         <Card>
-          <CardContent className="p-4">
-            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <CardContent className="p-4 flex justify-between items-center">
+            <form
+              className="space-y-4 w-[70%]"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <Textarea
                 placeholder="Add a comment..."
                 {...register("comment")}
@@ -301,12 +313,39 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
                   commenting...
                 </Button>
               ) : (
-                <Button type="submit" className="bg-[#b1cee0] text-gray-700">
+                <Button
+                  type="submit"
+                  className="bg-[#b1cee0] text-gray-700 hover:text-white"
+                >
                   <Send className="w-4 h-4 mr-2" />
                   Post Comment
                 </Button>
               )}
             </form>
+            <div>
+              <span>{rating} rating</span>
+              <ReactStars
+                count={5}
+                onChange={ratingChanged}
+                size={24}
+                isHalf={true}
+                activeColor="#ffd700"
+                color="#d3d3d3"
+              />
+              <button
+                onClick={handleSubmitRating}
+                className="bg-[#b1cee0] text-gray-700 font-semibold"
+                style={{
+                  marginTop: "10px",
+                  padding: "8px 16px",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                Give Rating
+              </button>
+            </div>
           </CardContent>
         </Card>
       </div>

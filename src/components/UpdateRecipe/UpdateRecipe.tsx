@@ -74,15 +74,23 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
   }, [recipeData, setValue]);
 
   const onSubmit = async (data: any) => {
-    // Filter out empty values from the form data
+   
+    const updateRecipeData= {
+      ...data,
+      description: data?.content
+      
+    }
+  
+    
     const updateData = Object.fromEntries(
-      Object.entries(data).filter(
+      Object.entries(updateRecipeData).filter(
         ([key, value]) => value !== "" && value !== null && value !== undefined
       )
     );
 
     // Call the updateRecipe mutation with the recipe ID
     const res: any = await updateRecipe({ updateData, _id: recipeData?._id });
+console.log("recipe update info", res?.data);
 
     // Check if the update was successful
     if (res?.data?.success) {
@@ -98,10 +106,10 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
         timer: 1500,
       });
 
-      // Optionally, reset the form (if needed)
+     
       reset();
     } else {
-      // Handle the case where the update fails (optional)
+     
       Swal.fire({
         position: "center",
         icon: "error",
@@ -114,6 +122,7 @@ const UpdateRecipe: React.FC<UpdateRecipeProps> = ({ recipeData }) => {
   const handleContentChange = (val: string) => {
     setValue("content", val);
   };
+// console.log(recipeData.content);
 
   return (
     <div className="space-y-4">

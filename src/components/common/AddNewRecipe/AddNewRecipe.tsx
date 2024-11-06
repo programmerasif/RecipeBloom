@@ -22,7 +22,7 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 const AddNewRecipe = () => {
   const [isimgUpload, setImgUpload] = useState(false);
   const [addRecipe] = useCreateRecipeMutation();
-  const { _id } = useAppSelector((state) => state.user);
+  const { _id,isPremium } = useAppSelector((state) => state.user);
 
   const {
     register,
@@ -45,6 +45,8 @@ const AddNewRecipe = () => {
       description: "",
       recipeImage: "",
       content: "",
+      isPremium:Boolean
+
     },
   });
 
@@ -135,6 +137,29 @@ const AddNewRecipe = () => {
 
   return (
     <div className="w-full h-screen overflow-y-scroll">
+       <div className="flex justify-start items-start w-full border">
+       <div className="lg:text-2xl font-semibold text-gray-700 flex justify-center items-center gap-2 px-10 py-2">
+          <span className="text-[#12143D]">
+            Create <span className="text-[#7aaccc] ps-2"> Recipe</span>
+          </span>
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="size-6 text-[#7aaccc]"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </span>
+        </div>
+       </div>
       <div className="m-6 bg-gray-50 p-10 rounded-md">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Form Column */}
@@ -266,7 +291,8 @@ const AddNewRecipe = () => {
                 <p className="text-red-500 text-sm">{errors.content.message}</p>
               )}
             </div>
-            <div className="flex items-center space-x-2 pt-10">
+            {
+              isPremium &&   <div className="flex items-center space-x-2 pt-10">
               <input
                 type="checkbox"
                 {...register("isPremium")}
@@ -276,6 +302,8 @@ const AddNewRecipe = () => {
                 Is Premium Recipe (optional)
               </label>
             </div>
+            }
+          
             {/* Submit Button */}
             <div className="mt-52">
               <Button

@@ -114,7 +114,7 @@ const UserMainDashboard = () => {
                   <SidebarLink
                     key={idx}
                     link={link}
-                    onClick={() => setActiveComponent(link.component!)} // Update active component on click
+                    onClick={() => setActiveComponent(link.component!)} 
                   />
                 ))}
               </div>

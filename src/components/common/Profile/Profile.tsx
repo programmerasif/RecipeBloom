@@ -1,13 +1,14 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useUpdateUserInfoMutation } from "@/redux/api/features/auth/authApi";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Following from "../Following/Following";
 import { Followers } from "../Followers/Follows";
+import PremiumCart from "@/components/sideSection/PremiumCart";
 
 interface ProfileFormInputs {
   name: string;
@@ -21,6 +22,7 @@ export default function UserProfile() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { image, _id,name, bio} = useAppSelector((state) => state.user);
   const [updateUserInfo, { isLoading }] = useUpdateUserInfoMutation();
+  const dispatch = useAppDispatch();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -72,6 +74,12 @@ export default function UserProfile() {
 
     if (Object.keys(formData).length > 0) {
       const res = await updateUserInfo({ formData, _id });
+      console.log(res?.data?.data);
+      // dispatch(updateUserInfo({
+      //   name: res?.data?.data?.name,
+      //   image: res?.data?.data?.image,
+      //   bio: res?.data?.data?.boi,
+      // }));
       if (res?.data?.success) {
         Swal.fire({
           position: "center",
@@ -101,8 +109,10 @@ export default function UserProfile() {
           <TabsTrigger value="info" className="data-[state=active]:bg-[#b4dffa] data-[state=active]:text-black" >User info</TabsTrigger>
         </TabsList>
         <TabsContent value="info" className="">
-          <Card className="w-full ">
-            <CardContent className="space-y-2 w-full ">
+         
+          <div className=" flex justify-center items-center">
+          <Card className="w-full flex justify-center items-center">
+            <CardContent className="space-y-2 w-[60%] ">
               <div className=" w-full mx-auto space-y-6 p-20">
                
                 <form
@@ -179,7 +189,10 @@ export default function UserProfile() {
                 <div className="flex flex-col justify-start items-start gap-2 w-1/2"></div>
               </div>
             </CardContent>
+            <PremiumCart isPremium={false}/>
           </Card>
+                      
+          </div>
         </TabsContent>
 
         {/* second table  */}
