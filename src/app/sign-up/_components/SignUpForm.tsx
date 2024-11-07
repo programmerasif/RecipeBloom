@@ -24,7 +24,8 @@ import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { TResError } from "@/types/global.types";
 import Cookies from "js-cookie";
-import { Loader } from "lucide-react";
+import Loader from "@/app/loader/loader";
+
 
 const userSignUpSchema = z.object({
   name: z.string().min(3, {

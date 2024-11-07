@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import Loader from "@/app/loader/loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useGetUsersStatusQuery } from "@/redux/api/features/auth/authApi";
 import { setIsPremiumMembership } from "@/redux/api/features/usersSlice/usersSlice";
-import { Check, CreditCard, Loader, Shield, Zap } from "lucide-react";
+import { Check, CreditCard, Shield, Zap } from "lucide-react";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
