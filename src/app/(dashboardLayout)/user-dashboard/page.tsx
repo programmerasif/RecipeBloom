@@ -42,7 +42,8 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ link, onClick }) => {
 
 const UserMainDashboard = () => {
   const user = useSelector((state: RootState) => state.user);
-  console.log(user);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const sideBrLinks = [
     {
@@ -105,7 +106,7 @@ const UserMainDashboard = () => {
       )}
     >
       <div className="">
-        <Sidebar open={true} setOpen={() => {}} animate={false}>
+      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} animate={false}>
           <SidebarBody className="justify-between gap-10">
             <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
             <div className="font-bold text-2xl">Welcome </div>

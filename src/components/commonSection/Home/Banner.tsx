@@ -8,7 +8,7 @@ const Banner = () => {
     <div className="relative lg:h-[calc(82vh-64px)] md:h-[calc(55vh-64px)] h-[calc(82vh-64px)]  overflow-hidden ">
       <div className="absolute bottom-0 left-0 w-[20%] h-1/2 border-double border-l border-b border-[#b1cee0]"></div>
       <div className="flex flex-col md:flex-row justify-between items-start h-[100%] w-full ">
-        <div className="flex justify-start items-center h-[100%] w-1/2">
+        <div className="flex justify-start items-center h-[100%] w-full md:w-1/2">
           <div className="px-10">
             <h5 className="text-2xl md:text-6xl font-bold w-full md:max-w-[40rem] text-[#1F1F38] leading-snug">
               Effortless Sweets Recipes to Satisfy Your Cravings!

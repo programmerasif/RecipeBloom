@@ -17,21 +17,20 @@ interface UserState {
   token: string | null;
 }
 
-// Define the initial state based on the user data
 const initialState: UserState = {
-  bio: "", // User bio
-  email: null, // User email
-  followers: [], // List of followers
-  following: [], // List of following users
-  image: null, // Profile image URL
-  isBlocked: false, // Is the user blocked
-  isPremium: false, // Is the user a premium user
-  name: null, // User's name
-  password: "$2a$12$LNUwA53pJt6e1POWyG7HaevJvAVSa4nEqZ2cCttXHBg0mEDueAT92", // Hashed password
-  recipePublished: [], // List of published recipes
-  role: null, // User role
-  socialLinks: [], // Social media links
-  _id: null, // User's unique ID
+  bio: "",
+  email: null,
+  followers: [],
+  following: [],
+  image: null,
+  isBlocked: false,
+  isPremium: false,
+  name: null,
+  password: "$2a$12$LNUwA53pJt6e1POWyG7HaevJvAVSa4nEqZ2cCttXHBg0mEDueAT92",
+  recipePublished: [],
+  role: null,
+  socialLinks: [],
+  _id: null,
   token: null,
 };
 
@@ -43,14 +42,26 @@ const userSlice = createSlice({
       return { ...state, ...action.payload };
     },
     setIsPremiumMembership: (state, action: PayloadAction<boolean>) => {
+      console.log("Action payload for isPremium:", action.payload); // Debugging log
       state.isPremium = action.payload;
     },
-    // Clear user info (reset to initial state)
     clearUserInfo: () => initialState,
+    updateProfileInfo: (
+      state,
+      action: PayloadAction<{ name?: string; bio?: string; image?: string }>
+    ) => {
+      if (action.payload.name) {
+        state.name = action.payload.name;
+      }
+      if (action.payload.bio) {
+        state.bio = action.payload.bio;
+      }
+      if (action.payload.image) {
+        state.image = action.payload.image;
+      }
+    },
   },
 });
 
-export const { setUserInfo, setIsPremiumMembership,clearUserInfo } = userSlice.actions;
-
-// Export the reducer
+export const { setUserInfo, setIsPremiumMembership, clearUserInfo ,updateProfileInfo} = userSlice.actions;
 export default userSlice.reducer;

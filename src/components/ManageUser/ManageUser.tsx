@@ -25,16 +25,24 @@ import {
   useGetUsersQuery,
   usePromotedToAdminMutation,
 } from "@/redux/api/features/auth/authApi";
+import { Search } from "lucide-react";
+import { Button } from "../ui/button";
+import { useForm } from "react-hook-form";
+import { Input } from "../ui/input";
 
 const ManageUser = () => {
   const [page, setPage] = useState(1);
   const [changeUserStatus] = useChangeUserStatusMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [promotedToAdmin] = usePromotedToAdminMutation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const { handleSubmit, register, reset } = useForm(); 
 
   const { data: users } = useGetUsersQuery({
     page,
+    search:searchTerm
   });
+console.log(users);
 
   const handlePaginatePrev = () => {
     setPage(page - 1);
@@ -45,7 +53,16 @@ const ManageUser = () => {
       setPage(page + 1);
       
     }
-    // console.log('out inside',users?.meta);
+  };
+
+
+  const onSearchSubmit = (data: any) => {
+   
+    
+    setPage(1);
+    setSearchTerm(data.search);
+    reset({ Search: "" });
+    // Call the API with search data here
   };
 
   const handelBlock = async (id: string, status: boolean) => {
@@ -146,9 +163,24 @@ const ManageUser = () => {
             </svg>
           </span>
         </div>
-        <button className="p-2 bg-[#dbe8f0] rounded-md ">
-          {/* <AddModal /> */}
-        </button>
+        <form
+          onSubmit={handleSubmit(onSearchSubmit)}
+          className="relative flex-grow"
+        >
+          <div className="flex justify-center items-center gap-2 w-[60%] ms-auto">
+            <div className="w-full">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search products..."
+                className="pl-8 w-full"
+                {...register("search")} 
+              />
+            </div>
+            <Button type="submit" className="ml-2 bg-[#b4dffa] text-black hover:text-white">
+              Search
+            </Button>
+          </div>
+        </form>
       </div>
       {/* search filtering sorting */}
 
@@ -306,12 +338,12 @@ const ManageUser = () => {
             <PaginationItem>
               <button
                 className={`${
-                  !users?.meta?.totalPage > users?.meta?.page
+                  users?.meta?.totalPage == users?.meta?.page
                     ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
                     : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
                 } `}
                 onClick={handlePaginateNext}
-                disabled={!users?.meta?.totalPage > users?.meta?.page}
+                disabled={users?.meta?.totalPage == users?.meta?.page}
               >
                 Next
               </button>

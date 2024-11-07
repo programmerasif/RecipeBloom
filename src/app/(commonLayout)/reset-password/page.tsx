@@ -19,7 +19,8 @@ const ResetPassword = () => {
 console.log(token);
 
     // Make an API call to the backend to reset the password
-    const response = await fetch("http://localhost:5001/api/v1/auth/reset-password", {
+    // const response = await fetch("http://localhost:5001/api/v1/auth/reset-password"
+    const response = await fetch("https://recipe-bloom-backend.vercel.app/api/v1/auth/reset-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

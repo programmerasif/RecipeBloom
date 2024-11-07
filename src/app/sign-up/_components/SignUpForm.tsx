@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { TResError } from "@/types/global.types";
 import Cookies from "js-cookie";
+import { Loader } from "lucide-react";
 
 const userSignUpSchema = z.object({
   name: z.string().min(3, {
@@ -88,6 +89,11 @@ export default function SignUpForm() {
 
   return (
     <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:px-8 shadow-input bg-white dark:bg-black">
+       {
+          isLoading && <div className="">
+            <Loader />
+          </div>
+        }
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
       Welcome to Recipe Bloom
       </h2>
@@ -148,7 +154,7 @@ export default function SignUpForm() {
           </div>
 
           <button
-            className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            className="bg-[#b1cee0] hover:bg-[#86aec7] duration-300 text-black relative group/btn  block  w-full  rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
             type={"submit"}
           >
             Sign up &rarr;

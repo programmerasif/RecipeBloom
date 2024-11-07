@@ -15,7 +15,7 @@ const About = () => {
       ];
   return (
     <>
-            <section className="">
+            <section className=" pt-10">
               <div className="flex flex-col gap-y-8 xl:flex-row items-center max-w-6xl mx-auto pt-10 mb-20 rounded-lg ">
                 <div className="ml-9 xl:ml-0">
                   <h2 className="font-manrope text-5xl font-bold text-gray-900 mb-6 ">About Us</h2>

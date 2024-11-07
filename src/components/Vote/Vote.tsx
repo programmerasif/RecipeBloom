@@ -51,14 +51,14 @@ const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VotePr
           variant="outline"
           size="icon"
           aria-label="Upvote"
-          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(like.includes(_id)? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
+          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(like.includes(_id || "")? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
           onClick={handelUpVot}
         >
           <ThumbsUp className="h-4 w-4" />
           <span>{like?.length}</span>
         </Button>
 
-        <Link href={`/recipe-feed/${_id?.id}`} >
+        <Link href={`/recipe-feed/${recipeId}`} >
           <Button variant="outline" size="icon" aria-label="Downvote" className="rounded-full p-1 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,7 @@ const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VotePr
           variant="outline"
           size="icon"
           aria-label="Downvote"
-          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(disLike.includes(_id)? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
+          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(disLike.includes(_id || "")? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
           onClick={handelDownVot}
         >
           <ThumbsDown className="h-4 w-4" />

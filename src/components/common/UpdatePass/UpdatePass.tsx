@@ -67,7 +67,7 @@ const UpdatePass = () => {
             <Input
               type="email"
               placeholder="Email"
-              value={email}
+              value={email || ''}
               {...register("email", { required: "Email is required" })}
             />
             {errors.email && <p className="text-red-500">{errors.email.message}</p>}

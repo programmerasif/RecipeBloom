@@ -14,6 +14,7 @@ import { Sidebar, SidebarBody } from "@/components/ui/sidebar";
 import DashboardInterface from "@/components/common/DashboardInterface";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { usePathname } from 'next/navigation';
 
 // Define the SidebarLink component type to accept onClick
 type SidebarLinkProps = {
@@ -28,6 +29,8 @@ type SidebarLinkProps = {
 };
 
 const SidebarLink: React.FC<SidebarLinkProps> = ({ link, onClick }) => {
+ 
+  
   return (
     <a
       href={link.href}
@@ -42,6 +45,12 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ link, onClick }) => {
 
 const AdminMainDashboard = () => {
   const user = useSelector((state: RootState) => state.user);
+  const [sidebarOpen, setSidebarOpen] = useState(false); 
+  const currentRoute = usePathname(); 
+  console.log(currentRoute);
+  // Toggle sidebar visibility
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
 
 
   const sideBrLinks = [
@@ -113,7 +122,7 @@ const AdminMainDashboard = () => {
       )}
     >
       <div className="">
-        <Sidebar open={true} setOpen={() => {}} animate={false}>
+        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} animate={false}>
           <SidebarBody className="justify-between gap-10">
             <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                <div className="font-bold text-2xl">Welcome </div>
@@ -147,6 +156,9 @@ const AdminMainDashboard = () => {
           </SidebarBody>
         </Sidebar>
       </div>
+    {
+        currentRoute === "/admin-dashboard#" && <div> welcome to Admin Dashboard</div>
+      }
       <DashboardInterface activeComponent={activeComponent} />
     </div>
   );

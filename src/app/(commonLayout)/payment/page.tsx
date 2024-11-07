@@ -1,28 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useGetUsersStatusQuery } from "@/redux/api/features/auth/authApi";
 import { setIsPremiumMembership } from "@/redux/api/features/usersSlice/usersSlice";
-import { Check, CreditCard, Loader, Shield, Zap } from "lucide-react"
-import { useState } from "react";
+import { Check, CreditCard, Loader, Shield, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 const PremiumMembershipPage = () => {
-  const { data: userStatus} = useGetUsersStatusQuery(undefined);
-  const { _id, email } = useAppSelector((state) => state.user);
-  const [premium, setIsPremium] = useState<boolean>();
+  const { data: userStatus } = useGetUsersStatusQuery(undefined);
+  const { _id, email, isPremium } = useAppSelector((state) => state.user); 
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-
   const user = userStatus?.data.find((item: any) => item?.email == email);
-  const isPremium = user?.isPremium;
 
-  const handelPremium = async () => {
+  const handlePremium = async () => {
     setLoading(true);
-    if (isPremium || premium) {
+    if (isPremium) { // Checks Redux state directly
       setLoading(false);
       return Swal.fire({
         position: "center",
@@ -32,14 +30,15 @@ const PremiumMembershipPage = () => {
         timer: 1800,
       });
     }
+
     const url = `https://recipe-bloom-backend.vercel.app/api/v1/users/promote-premium/${_id}`;
     try {
       const response = await fetch(url, {
-        method: "PATCH", 
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: "update" }), 
+        body: JSON.stringify({ status: "update" }),
       });
 
       if (!response.ok) {
@@ -47,29 +46,31 @@ const PremiumMembershipPage = () => {
       }
 
       const result = await response.json();
-      console.log("Data patched successfully:", result);
       if (result?.success) {
         const paymentUrl = result?.data?.payment_url;
         setLoading(false);
+
         if (paymentUrl) {
-          console.log(paymentUrl);
-          
-          window.location.href = paymentUrl;
-          setIsPremium(true);
-          dispatch(setIsPremiumMembership(true));
+          dispatch(setIsPremiumMembership(true)); // Dispatch to update Redux state
+          window.location.href = paymentUrl; // Redirects to payment URL
         } else {
           console.error("Payment link is not available.");
         }
-
-        setIsPremium(true);
       }
     } catch (error) {
       console.error("Error patching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Listen for changes in isPremium from Redux and log it to verify update
+  useEffect(() => {
+    console.log("Updated isPremium from Redux:", isPremium);
+  }, [isPremium]);
+
   return (
-    <div className="min-h-screen  flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold">Premium Membership</CardTitle>
@@ -99,13 +100,19 @@ const PremiumMembershipPage = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full bg-[#b1cee0] text-[#000000] hover:bg-[#b1cee0a9]" size="lg" onClick={handelPremium}>
-            <CreditCard className="mr-2 h-5 w-5" /> Subscribe Now
+          <Button
+            className="w-full bg-[#b1cee0] text-[#000000] hover:bg-[#b1cee0a9]"
+            size="lg"
+            onClick={handlePremium}
+            disabled={isLoading}
+          >
+            <CreditCard className="mr-2 h-5 w-5" /> {isPremium ? "Already Premium" : "Subscribe Now"}
           </Button>
         </CardFooter>
       </Card>
       {isLoading && <Loader />}
     </div>
-  )
-}
-export default PremiumMembershipPage
+  );
+};
+
+export default PremiumMembershipPage;

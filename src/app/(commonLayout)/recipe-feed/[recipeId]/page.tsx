@@ -70,7 +70,7 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
     await giveComment(comment);
     reset();
   };
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleUpdate = async (commentId: string) => {
     const inputValue = inputRef?.current?.value;
@@ -121,11 +121,15 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
 
     setAvgRating(res?.data?.data?.totalAverageRating);
 
-    if (res?.error?.data?.message == "Rating from this user already exists.") {
+    if (
+      res.error &&
+      "data" in res.error &&
+      (res.error.data as { message: string })?.message === "Rating from this user already exists."
+    ) {
       Swal.fire({
         position: "center",
         icon: "success",
-        title: "Thanks you already given ratings",
+        title: "Thanks, you already provided a rating",
         showConfirmButton: false,
         timer: 1500,
       });

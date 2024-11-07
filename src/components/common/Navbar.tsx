@@ -204,7 +204,7 @@ const Navbar = () => {
       <div
         className={`${
           isMobileMenuOpen
-            ? "fixed inset-0 top-[64px] z-30 bg-black bg-opacity-60"
+            ? "fixed inset-0 top-[64px]  bg-[#000000cc] z-50"
             : "hidden"
         } lg:hidden`}
       >

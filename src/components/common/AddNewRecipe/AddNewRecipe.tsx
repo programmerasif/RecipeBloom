@@ -56,6 +56,8 @@ const AddNewRecipe = () => {
   });
 
   const onSubmit = async (data: any) => {
+    console.log(data);
+    
     const strippedContent = stripHtmlTags(data.content);
     if (strippedContent.length < 50) {
       setError("content", {
@@ -295,8 +297,9 @@ const AddNewRecipe = () => {
               isPremium &&   <div className="flex items-center space-x-2 pt-10">
               <input
                 type="checkbox"
+                defaultChecked={true}
                 {...register("isPremium")}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <label htmlFor="isPremium" className="text-gray-700">
                 Is Premium Recipe (optional)

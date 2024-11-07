@@ -35,11 +35,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Badge, Crown, Search, SlidersHorizontal } from "lucide-react";
 import { useAppSelector } from "@/lib/hooks";
 import {
   useDeleteRecipeMutation,
   useGetUserFeedRecipesQuery,
+  useTogglePublishStatusMutation,
  
 } from "@/redux/api/features/recipe/recipe";
 import { useEffect, useState } from "react";
@@ -57,9 +58,10 @@ const ManageRecipe = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteFacility] = useDeleteRecipeMutation();
-
+ const [togglePublishStatus] = useTogglePublishStatusMutation()
   const { data: recipe } = useGetUserFeedRecipesQuery({
     page,
+    search:searchTerm
   },{
     pollingInterval: 1000,
   });
@@ -73,9 +75,14 @@ const ManageRecipe = () => {
       setPage(page + 1);
       
     }
-    // console.log('out inside',recipe?.meta);
+   
   };
+const handelTogglePublishStatus = async(id:string) => {
 
+  const res = await togglePublishStatus(id)
+  console.log(res);
+  
+}
   const handelDelete = async (id: string) => {
    
 
@@ -101,11 +108,11 @@ const ManageRecipe = () => {
 
   // Function to handle search submission (only search triggered by button)
   const onSearchSubmit = (data: any) => {
-    setSearchQuery(data.search); // Save the search query
+    setSearchQuery(data.search);
     setPage(1);
     setSearchTerm(searchQuery);
     reset({ Search: "" });
-    // Call the API with search data here
+   
   };
 
   // Effect to handle instant filtering when price range or category changes
@@ -126,7 +133,7 @@ const ManageRecipe = () => {
     <div className="sm:px-6 lg:px-20 mt-20 md:mt-28 w-full">
       <div className="flex sm:flex-col md:flex-row justify-between items-center mb-10 border rounded-md p-2">
         <div className="lg:text-2xl font-semibold text-gray-700 flex justify-center items-center gap-2">
-          <span className="text-[#12143D]">
+          <span className=" text-[#12143D]">
             Recipe <span className="text-[#7aaccc] ps-2"> Management</span>
           </span>
           <span>
@@ -166,7 +173,7 @@ const ManageRecipe = () => {
                 {...register("search")} // Register search input with react-hook-form
               />
             </div>
-            <Button type="submit" className="ml-2">
+            <Button type="submit" className="ml-2 bg-[#7aaccc]  text-black">
               Search
             </Button>
           </div>
@@ -212,7 +219,7 @@ const ManageRecipe = () => {
                   max={1000}
                   step={10}
                   value={priceRange}
-                  onValueChange={setPriceRange} // Update price range state instantly
+                  onValueChange={setPriceRange} 
                 />
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>${priceRange[0]}</span>
@@ -246,6 +253,7 @@ const ManageRecipe = () => {
               <TableHead className="text-start">Category</TableHead>
               <TableHead className="text-center">Status</TableHead>
               <TableHead className="text-start">Update</TableHead>
+              <TableHead className="text-start">Status</TableHead>
               <TableHead className="text-start">Remove</TableHead>
             </TableRow>
           </TableHeader>
@@ -268,6 +276,11 @@ const ManageRecipe = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-start items-start gap-2">
+                  {
+                    item?.isPremium && <Badge className="bg-yellow-500 hover:bg-yellow-600 p-1 ">
+                    <Crown className="h-3 w-3 mr-1" />
+                  </Badge>
+                  }
                     {item?.foodCategory}
                   </div>
                 </TableCell>
@@ -290,6 +303,14 @@ const ManageRecipe = () => {
                   <button className=" bg-green-100 rounded-md">
                     {/* <UpdateModal singleItem={item}/> */}
                     <UpdateRecipe recipeData={item} />
+                  </button>
+                </TableCell>
+                <TableCell onClick={() => handelTogglePublishStatus(item?._id)}>
+                  <button className=" bg-red-100 text-red-500 px-2 py-2 font-semibold">
+                    {
+                      item?.isPublished ? "Unpublished" : "Publish"
+                    }
+                    
                   </button>
                 </TableCell>
                 <TableCell>

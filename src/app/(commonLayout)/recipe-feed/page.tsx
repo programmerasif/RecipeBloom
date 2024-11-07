@@ -10,25 +10,54 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Vote from "@/components/Vote/Vote";
 import { useAppSelector } from "@/lib/hooks";
 import { useGetUserFeedRecipesQuery } from "@/redux/api/features/recipe/recipe";
-import { StarsIcon } from "lucide-react";
+import { Search, StarsIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Swal from "sweetalert2";
 
 export default function RecipeFeed() {
   const [items, setItems] = useState<any[]>([]);
+  const { control, handleSubmit,  } = useForm();
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  // Fetching data using your query hook (RTK Query)
   const { data } = useGetUserFeedRecipesQuery({
     page,
+    search:searchTerm
   });
+
+ console.log(data?.data);
+ 
+
+
+  // Handle change for the search input field
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+  };
+
+  const onSubmit = (data: any) => {
+    // Handle form submit logic (search term, filters, etc.)
+    console.log("Submitted data:", data);
+  };
+
+
+
   const router = useRouter();
   const { isPremium: isPremiumUser } = useAppSelector((state) => state.user);
   const fetchItems = (recipe: any) => {
@@ -46,12 +75,12 @@ export default function RecipeFeed() {
     setPage((prevPage) => prevPage + 1);
   };
 
-  // Trigger fetchItems when 'data' changes
   useEffect(() => {
     if (data?.data) {
       fetchItems(data?.data);
     }
   }, [data]);
+  console.log(isPremiumUser);
 
   const handelPrivate = (isPremium: boolean, event: any) => {
     if (isPremium && !isPremiumUser) {
@@ -76,9 +105,59 @@ export default function RecipeFeed() {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-2 justify-between relative gap-20">
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 justify-between relative gap-20">
       <main className=" me-auto  w-full  pt-20  border">
         <div className="sticky top-[4rem] z-50">
+
+
+
+        <div>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-2">
+      <div className="flex-grow">
+        <div className="relative">
+          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Controller
+            name="search"
+            control={control}
+            defaultValue={searchTerm}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="search"
+                type="search"
+                placeholder="Search..."
+                className="pl-8"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            )}
+          />
+        </div>
+      </div>
+
+      <Select>
+        <SelectTrigger className="w-[150px]">
+          <SelectValue placeholder="Sort by" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="newest">Newest</SelectItem>
+          <SelectItem value="mostLiked">Most Liked</SelectItem>
+        </SelectContent>
+      </Select>
+
+      <Select>
+        <SelectTrigger className="w-[150px]">
+          <SelectValue placeholder="Filter by" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All Categories</SelectItem>
+          <SelectItem value="Breakfast">Breakfast</SelectItem>
+          <SelectItem value="Main Course">Main Course</SelectItem>
+          <SelectItem value="Dessert">Dessert</SelectItem>
+        </SelectContent>
+      </Select>
+    </form>
+        </div>
           <AddProduct />
         </div>
         <div className="grid grid-cols-1 gap-4">
@@ -170,7 +249,9 @@ export default function RecipeFeed() {
           </InfiniteScroll>
         </div>
       </main>
+      <div className="hidden md:block">
       <SideSection />
+      </div>
     </div>
   );
 }

@@ -49,7 +49,7 @@ const MyRecipes = () => {
   const { _id } = useAppSelector((state) => state.user);
   const [page, setPage] = useState(1);
   const [priceRange, setPriceRange] = useState([0, 1000]);
-  const { handleSubmit, register, reset } = useForm(); // initialize useForm for searchtate
+  const { handleSubmit, register, reset } = useForm(); 
   const [category, setCategory] = useState("all"); // Category state
   const [sortBy, setSortBy] = useState("relevance"); // Sort by state
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,11 +120,14 @@ const MyRecipes = () => {
 
   // Effect to handle sorting changes instantly
   useEffect(() => {
-    // Perform the API request when sorting changes
+    
     console.log("Instant Sort Update:", { sortBy });
-    // You would call the API here for sorting
+    
   }, [sortBy]);
 
+  console.log(recipe?.meta?.totalPage);
+  console.log(recipe?.meta?.page);
+  
   return (
     <div className="sm:px-6 lg:px-20 mt-20 md:mt-28 w-full">
       <div className="flex sm:flex-col md:flex-row justify-between items-center mb-10 border rounded-md p-2">
@@ -169,7 +172,7 @@ const MyRecipes = () => {
                 {...register("search")} // Register search input with react-hook-form
               />
             </div>
-            <Button type="submit" className="ml-2 bg-[#b4dffa] text-black">
+            <Button type="submit" className="ml-2 bg-[#b4dffa] text-black hover:text-white">
               Search
             </Button>
           </div>
@@ -194,7 +197,7 @@ const MyRecipes = () => {
                 <h3 className="text-sm font-medium">Category</h3>
                 <Select
                   value={category}
-                  onValueChange={(value) => setCategory(value)} // Set category on change
+                  onValueChange={(value) => setCategory(value)} 
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
@@ -357,8 +360,8 @@ const MyRecipes = () => {
             <PaginationItem>
               <button
                 className={`${
-                  !recipe?.meta?.totalPage > recipe?.meta?.page
-                    ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
+                  recipe?.meta?.totalPage == recipe?.meta?.page
+                     ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
                     : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
                 } `}
                 onClick={handlePaginateNext}

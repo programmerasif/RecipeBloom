@@ -5,11 +5,28 @@ import Image from 'next/image'
 import premiumLogo from "../../assets/premium.png";
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
+import { useAppSelector } from '@/lib/hooks';
 const PremiumCart = ({isPremium}:{isPremium:boolean}) => {
     const router = useRouter();
-   
+    const {  email } = useAppSelector((state) => state.user);
    
     const handelPremium = async () => {
+      if (!email) {
+       return Swal.fire({
+          title: "Login first?",
+          text: "to access this feater you have to login ",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Want to Loin?"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push("/login");
+          }
+        });
+        
+      }
         router.push("/payment");
       };
     const showPremium = async () => {
@@ -58,9 +75,9 @@ const PremiumCart = ({isPremium}:{isPremium:boolean}) => {
             />
           </div>
         </div>
-        <div className="w-full p-8" >
+        <div className="w-full p-8" onClick={handelPremium}>
           <button className="w-full flex justify-center items-center bg-[#b1cee0] drop-shadow-xl text-center rounded-md text-black font-semibold py-3 hover:bg-[#b1cee0a9] duration-300">
-         {isPremium ? <div className="flex justify-center items-center" onClick={showPremium}> <Crown className="h-5 w-5 mr-1 " /> <span>Premium user</span></div > : <div className="flex justify-center items-center" onClick={handelPremium}><StarsIcon className="mr-2 h-5 w-5" /> <span>Subscribe Now</span></div>}
+         {isPremium ? <div className="flex justify-center items-center" onClick={showPremium}> <Crown className="h-5 w-5 mr-1 " /> <span>Premium user</span></div > : <div className="flex justify-center items-center" ><StarsIcon className="mr-2 h-5 w-5" /> <span>Subscribe Now</span></div>}
           </button>
         </div>
       </Card>

@@ -114,6 +114,15 @@ const recipeApi = baseApi.injectEndpoints({
         };
       },
     }),
+    togglePublishStatus: builder.mutation({
+      query: (id) => {
+        
+        return {
+          url: `recipe/toggle-status/${id}`,
+          method: "PATCH",
+        };
+      },
+    }),
     getSingleRecipe: builder.query({
       query: (id) => {
         return {
@@ -138,5 +147,6 @@ export const {
   useGivedislikeMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
-  useGiveRatingsMutation
+  useGiveRatingsMutation,
+  useTogglePublishStatusMutation
 } = recipeApi;
