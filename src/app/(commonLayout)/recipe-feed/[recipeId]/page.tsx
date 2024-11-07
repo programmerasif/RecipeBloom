@@ -53,7 +53,7 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
     pollingInterval: 1000,
   });
   const { register, handleSubmit, reset } = useForm<FormData>();
-  const { _id, name } = useAppSelector((state) => state.user);
+  const { _id, name,email} = useAppSelector((state) => state.user);
   const [updateComment, { isLoading: commentLoading }] =
     useUpdateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
@@ -294,7 +294,8 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
             </Card>
           );
         })}
-        <Card>
+        {
+          email && <Card>
           <CardContent className="p-4 flex justify-between items-center">
             <form
               className="space-y-4 w-[70%]"
@@ -352,6 +353,7 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
             </div>
           </CardContent>
         </Card>
+        }
       </div>
     </div>
   );

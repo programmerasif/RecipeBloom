@@ -32,18 +32,14 @@ import Swal from "sweetalert2";
 
 export default function RecipeFeed() {
   const [items, setItems] = useState<any[]>([]);
-  const { control, handleSubmit,  } = useForm();
+  const { control, handleSubmit } = useForm();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const { data } = useGetUserFeedRecipesQuery({
     page,
-    search:searchTerm
+    search: searchTerm,
   });
-
- console.log(data?.data);
- 
-
 
   // Handle change for the search input field
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,10 +52,10 @@ export default function RecipeFeed() {
     console.log("Submitted data:", data);
   };
 
-
-
   const router = useRouter();
-  const { isPremium: isPremiumUser } = useAppSelector((state) => state.user);
+  const { isPremium: isPremiumUser, email } = useAppSelector(
+    (state) => state.user
+  );
   const fetchItems = (recipe: any) => {
     if (!recipe) return;
 
@@ -95,6 +91,15 @@ export default function RecipeFeed() {
         confirmButtonColor: "#3085d6",
       }).then((result) => {
         if (result.isConfirmed) {
+          if (!email) {
+           return Swal.fire({
+              position: "center",
+              icon: "info",
+              title: "you are not login , please login",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
           router.push("/payment");
         }
       });
@@ -108,56 +113,56 @@ export default function RecipeFeed() {
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 justify-between relative gap-20">
       <main className=" me-auto  w-full  pt-20  border">
         <div className="sticky top-[4rem] z-50">
+          <div>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex items-center space-x-2"
+            >
+              <div className="flex-grow">
+                <div className="relative">
+                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Controller
+                    name="search"
+                    control={control}
+                    defaultValue={searchTerm}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        id="search"
+                        type="search"
+                        placeholder="Search..."
+                        className="pl-8"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
 
+              <Select>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest</SelectItem>
+                  <SelectItem value="mostLiked">Most Liked</SelectItem>
+                </SelectContent>
+              </Select>
 
-
-        <div>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex items-center space-x-2">
-      <div className="flex-grow">
-        <div className="relative">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <Controller
-            name="search"
-            control={control}
-            defaultValue={searchTerm}
-            render={({ field }) => (
-              <Input
-                {...field}
-                id="search"
-                type="search"
-                placeholder="Search..."
-                className="pl-8"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            )}
-          />
-        </div>
-      </div>
-
-      <Select>
-        <SelectTrigger className="w-[150px]">
-          <SelectValue placeholder="Sort by" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="newest">Newest</SelectItem>
-          <SelectItem value="mostLiked">Most Liked</SelectItem>
-        </SelectContent>
-      </Select>
-
-      <Select>
-        <SelectTrigger className="w-[150px]">
-          <SelectValue placeholder="Filter by" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All Categories</SelectItem>
-          <SelectItem value="Breakfast">Breakfast</SelectItem>
-          <SelectItem value="Main Course">Main Course</SelectItem>
-          <SelectItem value="Dessert">Dessert</SelectItem>
-        </SelectContent>
-      </Select>
-    </form>
-        </div>
+              <Select>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="Filter by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="Breakfast">Breakfast</SelectItem>
+                  <SelectItem value="Main Course">Main Course</SelectItem>
+                  <SelectItem value="Dessert">Dessert</SelectItem>
+                </SelectContent>
+              </Select>
+            </form>
+          </div>
           <AddProduct />
         </div>
         <div className="grid grid-cols-1 gap-4">
@@ -250,7 +255,7 @@ export default function RecipeFeed() {
         </div>
       </main>
       <div className="hidden md:block">
-      <SideSection />
+        <SideSection />
       </div>
     </div>
   );
