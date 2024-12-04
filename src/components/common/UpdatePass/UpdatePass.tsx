@@ -35,8 +35,14 @@ const UpdatePass = () => {
     }
     // Make your API call here
   };
+
+  
+
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col justify-center gap-10 items-center p-8">
+      <h4 className='font-semibold text-2xl flex justify-start items-start w-full'>user-dashboard/update-password</h4>
+      <div className="w-full  p-10 border-2 border-dashed">
+      <div className="w-full">
       <div className="flex justify-start items-start w-full border">
        <div className="lg:text-2xl font-semibold text-gray-700 flex justify-center items-center gap-2 px-10 py-2">
           <span className="text-[#12143D]">
@@ -60,7 +66,7 @@ const UpdatePass = () => {
           </span>
         </div>
        </div>
-      <div className="p-10 w-full">
+      <div className="py-10 w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-start items-start gap-5 w-full">
           <div className="w-full">
             <Label>Email</Label>
@@ -103,8 +109,9 @@ const UpdatePass = () => {
         </form>
       </div>
     </div>
+    </div>
+    </div>
   );
-  
 }
 
 export default UpdatePass

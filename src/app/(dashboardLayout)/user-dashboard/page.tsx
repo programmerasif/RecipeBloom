@@ -14,6 +14,7 @@ import { Sidebar, SidebarBody } from "@/components/ui/sidebar";
 import DashboardInterface from "@/components/common/DashboardInterface";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { AlarmClockPlus, Combine, CookingPot } from "lucide-react";
 
 // Define the SidebarLink component type to accept onClick
 type SidebarLinkProps = {
@@ -63,21 +64,30 @@ const UserMainDashboard = () => {
       component: "Profile",
     },
     {
-      label: "Add New Recipe",
-      href: "#",
-      icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-      component: "AddNewRecipe",
-    },
-    {
       label: "My Recipes",
       href: "#",
       icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <CookingPot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "MyRecipes",
     },
+    {
+      label: "Connection",
+      href: "#",
+      icon: (
+        <Combine  className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+      component: "Connection",
+    },
+    {
+      label: "Add New Recipe",
+      href: "#",
+      icon: (
+        <AlarmClockPlus className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+      component: "AddNewRecipe",
+    },
+    
     {
       label: "Update Password",
       href: "#",
@@ -102,7 +112,7 @@ const UserMainDashboard = () => {
     <div
       className={cn(
         "rounded-md flex flex-col md:flex-row  dark:bg-neutral-800 w-full flex-1 max-w-full mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-        "h-[100vh]" // for your use case, use `h-screen` instead of `h-[60vh]`
+        "h-[100vh]" 
       )}
     >
       <div className="">

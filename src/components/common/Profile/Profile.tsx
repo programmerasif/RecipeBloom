@@ -1,13 +1,11 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useUpdateUserInfoMutation } from "@/redux/api/features/auth/authApi";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import Following from "../Following/Following";
-import { Followers } from "../Followers/Follows";
+
 import PremiumCart from "@/components/sideSection/PremiumCart";
 import { updateProfileInfo } from "@/redux/api/features/usersSlice/usersSlice";
 
@@ -108,22 +106,7 @@ export default function UserProfile() {
       <div className="text-3xl font-semibold text-[] py-10 ">
         user-dashboard/Profile Info
       </div>
-      <Tabs defaultValue="connections" className="w-full min-h-[100vh] ">
-        <TabsList className="grid w-full grid-cols-2 border">
-          <TabsTrigger
-            value="connections"
-            className="data-[state=active]:bg-[#b4dffa] data-[state=active]:text-black"
-          >
-            Connections
-          </TabsTrigger>
-          <TabsTrigger
-            value="info"
-            className="data-[state=active]:bg-[#b4dffa] data-[state=active]:text-black"
-          >
-            User info
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="info" className="">
+
           <div className=" flex justify-center items-center">
             <Card className="w-full flex justify-center items-center">
               <CardContent className="space-y-2 w-[60%] ">
@@ -211,28 +194,7 @@ export default function UserProfile() {
               <PremiumCart isPremium={false} />
             </Card>
           </div>
-        </TabsContent>
-
-        {/* second table  */}
-        <TabsContent value="connections" className="w-full px-0">
-          <Card className="w-full ">
-            <CardContent className="px-0">
-              <Tabs defaultValue="following" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="followers">Followers</TabsTrigger>
-                  <TabsTrigger value="following">Following</TabsTrigger>
-                </TabsList>
-                <TabsContent className="min-h-[70vh]" value="followers">
-                  <Followers />
-                </TabsContent>
-                <TabsContent className="min-h-[70vh]" value="following">
-                  <Following />
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+    
     </div>
   );
 }

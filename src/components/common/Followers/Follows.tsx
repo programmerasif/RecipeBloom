@@ -41,13 +41,12 @@ console.log(res);
 }
 
   return (
-    <div className="container mx-auto py-10 px-4">
-     <h1 className="text-2xl font-bold mb-4">{`Total followers ${followers?.data?.length} person`}</h1>
-      <div className="border rounded-lg overflow-hidden">
+    <div className="container">
+      <div className="border rounded-lg overflow-hidden bg-[#fbfcfd]">
       {
             followers?.data?.length < 1 ? (<div className="flex flex-col justify-center items-center h-[60vh] w-full"><File /><span>followers not available</span> </div>): (
-              <ScrollArea className="h-[60vh] w-full rounded-md border">
-            <Table>
+              <ScrollArea className="min-h-[50vh] w-full rounded-md border">
+            <Table className="">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[50px]">Image</TableHead>
@@ -61,7 +60,7 @@ console.log(res);
               <TableBody className="w-full">
                 {followers?.data.map((user:any) => (
                   <TableRow key={user?._id} className="w-full">
-                    <TableCell className="">
+                    <TableCell className="bg-[#EBF5FB]">
                       <Avatar>
                         <AvatarImage src={user?.image} alt={user?.name} />
                         <AvatarFallback>
@@ -69,7 +68,7 @@ console.log(res);
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
-                    <TableCell className="font-medium">{user?.name}</TableCell>
+                    <TableCell className="font-bold text-balance text-[#262626e5] w-[18%] bg-[#EBF5FB] rounded-br-full">{user?.name}</TableCell>
                     <TableCell>
                       {user?.isPremium ? (
                         <Badge

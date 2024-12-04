@@ -62,7 +62,6 @@ console.log(users);
     setPage(1);
     setSearchTerm(data.search);
     reset({ Search: "" });
-    // Call the API with search data here
   };
 
   const handelBlock = async (id: string, status: boolean) => {

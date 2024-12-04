@@ -38,16 +38,15 @@ const Following = () => {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-4">{`Total following ${following?.data?.length} person`}</h1>
-      <div className="border rounded-lg overflow-hidden">
+    <div className="container">
+      <div className="border rounded-lg overflow-hidden bg-[#fbfcfd]">
         {following?.data?.length < 1 ? (
           <div className="flex flex-col justify-center items-center h-[60vh] w-full">
             <File />
             <span>you are not following anyone</span>{" "}
           </div>
         ) : (
-          <ScrollArea className="h-[60vh] w-full rounded-md border">
+          <ScrollArea className="h-[50vh] w-full rounded-md border">
             <Table>
             <TableHeader>
               <TableRow>
@@ -62,7 +61,7 @@ const Following = () => {
               <TableBody className="w-full">
                 {following?.data.map((user:any) => (
                   <TableRow key={user?._id} className="w-full">
-                    <TableCell className="">
+                    <TableCell className="bg-[#EBF5FB]">
                       <Avatar>
                         <AvatarImage src={user?.image} alt={user?.name} />
                         <AvatarFallback>
@@ -70,7 +69,7 @@ const Following = () => {
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
-                    <TableCell className="font-medium">{user?.name}</TableCell>
+                    <TableCell className="font-bold text-balance text-[#262626e5] w-[18%] bg-[#EBF5FB] rounded-br-full">{user?.name}</TableCell>
                     <TableCell>
                       {user?.isPremium ? (
                         <Badge

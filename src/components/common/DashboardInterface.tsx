@@ -1,4 +1,6 @@
 "use client";
+import Connection from "../Connection/Connection";
+import DashboardContent from "../DashboardContent/DashboardContent";
 import ManageRecipe from "../ManageRecipe/ManageRecipe";
 import ManageUser from "../ManageUser/ManageUser";
 import MyRecipes from "../MyRecipes/MyRecipes";
@@ -12,9 +14,11 @@ const DashboardInterface = ({
 }: {
   activeComponent: string;
 }) => {
+  console.log(activeComponent );
+  
   return (
     <div className="flex flex-1 p-4">
-      {/* {activeComponent === "Dashboard" && <DashboardContent />} */}
+      {activeComponent === "Dashboard" && <DashboardContent />}
       {activeComponent === "ManageUser" && <ManageUser />}
       {activeComponent === "ManageRecipe" && <ManageRecipe />}
       {/* {activeComponent === "Settings" && <SettingsContent />} */}
@@ -23,6 +27,7 @@ const DashboardInterface = ({
       {activeComponent === "MyRecipes" && <MyRecipes />}
       {activeComponent === "AddNewRecipe" && <AddNewRecipe />}
       {activeComponent === "Profile" && <UserProfile />}
+      {activeComponent === "Connection" && <Connection />}
       {activeComponent === "UpdatePass" && <UpdatePass />}
     </div>
   );
