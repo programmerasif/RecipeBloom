@@ -151,7 +151,7 @@ const MyRecipes = () => {
               </div>
               <Button
                 type="submit"
-                className="ml-2 bg-[#b4dffa] text-black hover:text-white"
+                className="ml-2 bg-blue-500 text-black hover:text-white"
               >
                 Search
               </Button>
@@ -236,7 +236,7 @@ const MyRecipes = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              
+
               {recipe?.data?.map((item: any) => (
                 <TableRow key={item?._id}>
                   <TableCell className="font-bold text-balance text-[#262626e5] w-[22%] bg-[#EBF5FB] rounded-br-full">
@@ -281,11 +281,10 @@ const MyRecipes = () => {
                   </TableCell>
                   <TableCell>
                     <button
-                      className={` font-semibold  px-3 py-1 rounded-md ${
-                        item?.isDeleted
-                          ? "disabled bg-gray-200"
-                          : "bg-red-100 text-red-500"
-                      }`}
+                      className={` font-semibold  px-3 py-1 rounded-md ${item?.isDeleted
+                        ? "disabled bg-gray-200"
+                        : "bg-red-100 text-red-500"
+                        }`}
                       onClick={() => handelDelete(item?._id)}
                     >
                       <svg
@@ -307,31 +306,30 @@ const MyRecipes = () => {
               ))}
             </TableBody>
           </Table>
-          { isLoading && 
-              <div className="w-full flex flex-col gap-10 justify-between items-center ">
-                <div className="w-full flex gap-4 justify-between items-center">
+          {isLoading &&
+            <div className="w-full flex flex-col gap-10 justify-between items-center ">
+              <div className="w-full flex gap-4 justify-between items-center">
                 <CommonSkeleton />
                 <CommonSkeleton />
-                <CommonSkeleton />  
-                </div>
-                <div className="w-full flex gap-4 justify-between items-center">
                 <CommonSkeleton />
-                <CommonSkeleton />
-                <CommonSkeleton />  
-                </div>
               </div>
-              }
+              <div className="w-full flex gap-4 justify-between items-center">
+                <CommonSkeleton />
+                <CommonSkeleton />
+                <CommonSkeleton />
+              </div>
+            </div>
+          }
         </div>
         <div className="pt-8 ">
           <Pagination>
             <PaginationContent>
               <PaginationItem>
                 <button
-                  className={`${
-                    page === 1
-                      ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
-                      : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
-                  } `}
+                  className={`${page === 1
+                    ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
+                    : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
+                    } `}
                   onClick={handlePaginatePrev}
                   disabled={page === 1}
                 >
@@ -339,7 +337,7 @@ const MyRecipes = () => {
                 </button>
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink href="#">{}</PaginationLink>
+                <PaginationLink href="#">{ }</PaginationLink>
               </PaginationItem>
               <PaginationItem>
                 <PaginationLink href="#" isActive>
@@ -347,18 +345,17 @@ const MyRecipes = () => {
                 </PaginationLink>
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink href="#">{}</PaginationLink>
+                <PaginationLink href="#">{ }</PaginationLink>
               </PaginationItem>
               <PaginationItem>
                 <PaginationEllipsis />
               </PaginationItem>
               <PaginationItem>
                 <button
-                  className={`${
-                    recipe?.meta?.totalPage == recipe?.meta?.page
-                      ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
-                      : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
-                  } `}
+                  className={`${recipe?.meta?.totalPage == recipe?.meta?.page
+                    ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
+                    : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
+                    } `}
                   onClick={handlePaginateNext}
                   disabled={!recipe?.meta?.totalPage > recipe?.meta?.page}
                 >

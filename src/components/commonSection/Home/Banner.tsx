@@ -1,53 +1,85 @@
-import Image from "next/image";
-import pan from "../../../assets/foodPan.svg";
-import "./banner.css";
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
+import useEmblaCarousel from 'embla-carousel-react'
+import bannerOne from '@/assets/banner1.jpg'
+import bannerTwo from '@/assets/banner2.jpg'
+import bannerThree from '@/assets/banner3.jpg'
+
 import { Button } from "@/components/ui/button";
 
 const Banner = () => {
+  const images = [
+    bannerOne,bannerTwo,bannerThree
+  ]
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true })
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return
+    setCurrentIndex(emblaApi.selectedScrollSnap())
+  }, [emblaApi])
+
+  useEffect(() => {
+    if (!emblaApi) return
+    onSelect()
+    emblaApi.on('select', onSelect)
+    
+ 
+    const autoplay = setInterval(() => {
+      if (emblaApi.canScrollNext()) {
+        emblaApi.scrollNext()
+      } else {
+        emblaApi.scrollTo(0)
+      }
+    }, 4000) 
+
+    return () => {
+      emblaApi.off('select', onSelect)
+      clearInterval(autoplay)
+    }
+  }, [emblaApi, onSelect])
   return (
-    <div className="relative lg:h-[calc(82vh-64px)] md:h-[calc(55vh-64px)] h-[calc(82vh-64px)]  overflow-hidden ">
-      <div className="absolute bottom-0 left-0 w-[20%] h-1/2 border-double border-l border-b border-[#b1cee0]"></div>
-      <div className="flex flex-col md:flex-row justify-between items-start h-[100%] w-full ">
-        <div className="flex justify-start items-center h-[100%] w-full md:w-1/2">
-          <div className="px-10">
-            <h5 className="text-2xl md:text-6xl font-bold w-full md:max-w-[40rem] text-[#1F1F38] leading-snug">
-              Effortless Sweets Recipes to Satisfy Your Cravings!
-            </h5>
-            <p className="text-[#37375e] font-semibold mt-4">
-              Satisfy your sweet tooth with simple, delicious recipes that
-              anyone can make in minutes. Perfect for beginners and experts
-              alike!
-            </p>
-            <Button className="bg-[#b1cee0] duration-300 text-black  mt-4">
-              {" "}
-              Start Now
-            </Button>
-            <div className="mt-8 flex justify-between items-center w-full md:max-w-[40rem] text-5xl font-semibold">
-              <div className="flex justify-center items-center gap-5">
-                <div>
-                  449k <span className="text-sm">Active User</span>
-                </div>
-              </div>
-              <div className="flex justify-center items-center gap-5">
-                <div>
-                  4.8 <span className="text-sm">Average rating</span>
-                </div>
-              </div>
+    <div className="relative h-[90vh] w-full overflow-hidden">
+      <div className="absolute inset-0" ref={emblaRef}>
+        <div className="flex h-full">
+          {images.map((src, index) => (
+            <div className="relative h-full min-w-full" key={index}>
+              <Image
+                src={src}
+                alt={`Slide ${index + 1}`}
+                layout="fill"
+                objectFit="cover"
+                priority={index === 0}
+              />
             </div>
-          </div>
+          ))}
         </div>
-        <div className="w-full md:w-1/2  h-[100%] hidden md:block">
-          <div className="w-full h-full rounded-3xl bg-[#b1cee0] text-white flex justify-center items-center clip-triangle relative"></div>
-          <div className="absolute top-[10%] h-[80%]">
-            <Image
-              src={pan}
-              alt="User profile image"
-              width={100}
-              height={100}
-              className=" w-full md:max-w-[800px] h-full  "
-            />
-          </div>
-        </div>
+      </div>
+      <div className="absolute inset-0 bg-black bg-opacity-50" />
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center text-white">
+        <h1 className="mb-4 text-3xl font-bold leading-tight md:text-5xl lg:text-6xl">
+          Effortless Sweets Recipes to Satisfy Your Cravings!
+        </h1>
+        <p className="mb-6 max-w-2xl text-base md:text-lg lg:text-xl">
+          Satisfy your sweet tooth with simple, delicious recipes that anyone can make in minutes. Perfect for beginners and experts alike!
+        </p>
+        <Button size="lg" className="bg-[#2563eb] text-white hover:bg-[#2563eb]/90 "
+        style={{borderRadius:"10px"}}
+        >
+          Get Start
+        </Button>
+      </div>
+      <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center space-x-2">
+        {images.map((_, index) => (
+          <div
+            key={index}
+            className={`h-2 w-2 rounded-full ${
+              index === currentIndex ? 'bg-white' : 'bg-white/50'
+            }`}
+          />
+        ))}
       </div>
     </div>
   );

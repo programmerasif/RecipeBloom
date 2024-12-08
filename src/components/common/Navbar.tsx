@@ -71,7 +71,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="container mb-10 z-20 transition-all duration-300 bg-[#b1cee0] px-4 rounded-md fixed">
+    <nav className="container mb-10 z-20 transition-all duration-300 bg-blue-600 px-4 rounded-md fixed">
       <div className="mx-auto w-full">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
@@ -91,7 +91,7 @@ const Navbar = () => {
                 <Link
                   key={menu.id}
                   href={menu.href}
-                  className=" text-black hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+                  className=" text-white hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   {menu.linkText}
                 </Link>
@@ -112,7 +112,7 @@ const Navbar = () => {
                   <div className="flex justify-center items-center gap-5">
                     <Link
                       href="/login"
-                      className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
+                      className=" text-white hover:text-gray-600 py-2 rounded-md text-sm font-medium"
                     >
                       <Button className="bg-[#F54749] duration-300">
                         Login
@@ -120,7 +120,7 @@ const Navbar = () => {
                     </Link>
                     <Link
                       href="/sign-up"
-                      className=" text-black hover:text-gray-600 py-2 rounded-md text-sm font-medium"
+                      className=" text-white hover:text-gray-600 py-2 rounded-md text-sm font-medium"
                     >
                       <Button className="bg-[#F54749] duration-300">
                         Register
@@ -158,7 +158,7 @@ const Navbar = () => {
             )
             <button
               type="button"
-              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               aria-controls="mobile-menu"
               aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

@@ -33,7 +33,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ link, onClick }) => {
     <a
       href={link.href}
       onClick={onClick} // Handle the click event
-      className="flex items-center p-2 text-sm font-medium text-neutral-700 hover:bg-neutral-200 rounded-md"
+      className="flex items-center p-2 text-sm font-medium text-white hover:bg-neutral-200 rounded-md"
     >
       {link.icon}
       <span className="ml-3">{link.label}</span>
@@ -51,7 +51,7 @@ const UserMainDashboard = () => {
       label: "Home",
       href: "/",
       icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconBrandTabler className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Home",
     },
@@ -59,7 +59,7 @@ const UserMainDashboard = () => {
       label: "Profile",
       href: "#",
       icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconUserBolt className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Profile",
     },
@@ -67,7 +67,7 @@ const UserMainDashboard = () => {
       label: "My Recipes",
       href: "#",
       icon: (
-        <CookingPot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <CookingPot className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "MyRecipes",
     },
@@ -75,7 +75,7 @@ const UserMainDashboard = () => {
       label: "Connection",
       href: "#",
       icon: (
-        <Combine  className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <Combine  className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Connection",
     },
@@ -83,7 +83,7 @@ const UserMainDashboard = () => {
       label: "Add New Recipe",
       href: "#",
       icon: (
-        <AlarmClockPlus className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <AlarmClockPlus className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "AddNewRecipe",
     },
@@ -92,7 +92,7 @@ const UserMainDashboard = () => {
       label: "Update Password",
       href: "#",
       icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconSettings className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "UpdatePass",
     },
@@ -100,7 +100,7 @@ const UserMainDashboard = () => {
       label: "Logout",
       href: "#",
       icon: (
-        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconArrowLeft className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Logout",
     },
@@ -111,7 +111,7 @@ const UserMainDashboard = () => {
   return (
     <div
       className={cn(
-        "rounded-md flex flex-col md:flex-row  dark:bg-neutral-800 w-full flex-1 max-w-full mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+        "rounded-md flex flex-col md:flex-row  dark:bg-neutral-800 w-full flex-1 max-w-full mx-auto  dark:border-neutral-700 overflow-hidden",
         "h-[100vh]" 
       )}
     >

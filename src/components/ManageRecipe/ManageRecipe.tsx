@@ -41,7 +41,7 @@ import {
   useDeleteRecipeMutation,
   useGetUserFeedRecipesQuery,
   useTogglePublishStatusMutation,
- 
+
 } from "@/redux/api/features/recipe/recipe";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -49,7 +49,7 @@ import Swal from "sweetalert2";
 import UpdateRecipe from "../UpdateRecipe/UpdateRecipe";
 
 const ManageRecipe = () => {
-  
+
   const [page, setPage] = useState(1);
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const { handleSubmit, register, reset } = useForm(); // initialize useForm for searchtate
@@ -58,11 +58,11 @@ const ManageRecipe = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteFacility] = useDeleteRecipeMutation();
- const [togglePublishStatus] = useTogglePublishStatusMutation()
+  const [togglePublishStatus] = useTogglePublishStatusMutation()
   const { data: recipe } = useGetUserFeedRecipesQuery({
     page,
-    search:searchTerm
-  },{
+    search: searchTerm
+  }, {
     pollingInterval: 1000,
   });
 
@@ -73,18 +73,18 @@ const ManageRecipe = () => {
   const handlePaginateNext = () => {
     if (recipe?.meta?.totalPage > recipe?.meta?.page) {
       setPage(page + 1);
-      
-    }
-   
-  };
-const handelTogglePublishStatus = async(id:string) => {
 
-  const res = await togglePublishStatus(id)
-  console.log(res);
-  
-}
+    }
+
+  };
+  const handelTogglePublishStatus = async (id: string) => {
+
+    const res = await togglePublishStatus(id)
+    console.log(res);
+
+  }
   const handelDelete = async (id: string) => {
-   
+
 
     Swal.fire({
       title: "Are you sure?",
@@ -112,7 +112,7 @@ const handelTogglePublishStatus = async(id:string) => {
     setPage(1);
     setSearchTerm(searchQuery);
     reset({ Search: "" });
-   
+
   };
 
   // Effect to handle instant filtering when price range or category changes
@@ -134,7 +134,7 @@ const handelTogglePublishStatus = async(id:string) => {
       <div className="flex sm:flex-col md:flex-row justify-between items-center mb-10 border rounded-md p-2">
         <div className="lg:text-2xl font-semibold text-gray-700 flex justify-center items-center gap-2">
           <span className=" text-[#12143D]">
-            Recipe <span className="text-[#7aaccc] ps-2"> Management</span>
+            Recipe <span className="text-blue-500 ps-2"> Management</span>
           </span>
           <span>
             <svg
@@ -143,7 +143,7 @@ const handelTogglePublishStatus = async(id:string) => {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="size-6 text-[#7aaccc]"
+              className="size-6 text-blue-500"
             >
               <path
                 strokeLinecap="round"
@@ -169,11 +169,13 @@ const handelTogglePublishStatus = async(id:string) => {
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search products..."
-                className="pl-8 w-full"
-                {...register("search")} // Register search input with react-hook-form
+                className="pl-8 w-full bg-[#d9eafa91]"
+                {...register("search")} 
               />
             </div>
-            <Button type="submit" className="ml-2 bg-[#7aaccc]  text-black">
+            <Button type="submit" className="ml-2 bg-blue-500 text-white duration-300"
+            style={{borderRadius:"10px"}}
+            >
               Search
             </Button>
           </div>
@@ -219,7 +221,7 @@ const handelTogglePublishStatus = async(id:string) => {
                   max={1000}
                   step={10}
                   value={priceRange}
-                  onValueChange={setPriceRange} 
+                  onValueChange={setPriceRange}
                 />
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>${priceRange[0]}</span>
@@ -243,7 +245,7 @@ const handelTogglePublishStatus = async(id:string) => {
           </SelectContent>
         </Select>
       </div>
-      <div className="bg-[#fbfcfd] shadow-sm min-h-[40vh]">
+      <div className="bg-[#fbfcfd93] shadow-sm min-h-[40vh]">
         <Table>
           <TableHeader>
             <TableRow>
@@ -276,11 +278,11 @@ const handelTogglePublishStatus = async(id:string) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-start items-start gap-2">
-                  {
-                    item?.isPremium && <Badge className="bg-yellow-500 hover:bg-yellow-600 p-1 ">
-                    <Crown className="h-3 w-3 mr-1" />
-                  </Badge>
-                  }
+                    {
+                      item?.isPremium && <Badge className="bg-yellow-500 hover:bg-yellow-600 p-1 ">
+                        <Crown className="h-3 w-3 mr-1" />
+                      </Badge>
+                    }
                     {item?.foodCategory}
                   </div>
                 </TableCell>
@@ -310,16 +312,15 @@ const handelTogglePublishStatus = async(id:string) => {
                     {
                       item?.isPublished ? "Unpublished" : "Publish"
                     }
-                    
+
                   </button>
                 </TableCell>
                 <TableCell>
                   <button
-                    className={` font-semibold  px-3 py-1 rounded-md ${
-                      item?.isDeleted
-                        ? "disabled bg-gray-200"
-                        : "bg-red-100 text-red-500"
-                    }`}
+                    className={` font-semibold  px-3 py-1 rounded-md ${item?.isDeleted
+                      ? "disabled bg-gray-200"
+                      : "bg-red-100 text-red-500"
+                      }`}
                     onClick={() => handelDelete(item?._id)}
                   >
                     <svg
@@ -347,11 +348,10 @@ const handelTogglePublishStatus = async(id:string) => {
           <PaginationContent>
             <PaginationItem>
               <button
-                className={`${
-                  page === 1
-                    ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
-                    : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
-                } `}
+                className={`${page === 1
+                  ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
+                  : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
+                  } `}
                 onClick={handlePaginatePrev}
                 disabled={page === 1}
               >
@@ -359,7 +359,7 @@ const handelTogglePublishStatus = async(id:string) => {
               </button>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">{}</PaginationLink>
+              <PaginationLink href="#">{ }</PaginationLink>
             </PaginationItem>
             <PaginationItem>
               <PaginationLink href="#" isActive>
@@ -367,18 +367,17 @@ const handelTogglePublishStatus = async(id:string) => {
               </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">{}</PaginationLink>
+              <PaginationLink href="#">{ }</PaginationLink>
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
               <button
-                className={`${
-                  !recipe?.meta?.totalPage > recipe?.meta?.page
-                    ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
-                    : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
-                } `}
+                className={`${!recipe?.meta?.totalPage > recipe?.meta?.page
+                  ? "bg-gray-300 md:px-6 md:py-3 sm:py-2 px-3 text-sm rounded-full text-gray-100"
+                  : "bg-white md:px-6 md:py-3 sm:py-2 px-3 text-sm text-black font-semibold rounded-full"
+                  } `}
                 onClick={handlePaginateNext}
                 disabled={!recipe?.meta?.totalPage > recipe?.meta?.page}
               >

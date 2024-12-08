@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import {CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Check, Crown, StarsIcon } from 'lucide-react'
 import Image from 'next/image'
 import premiumLogo from "../../assets/premium.png";
@@ -40,7 +40,9 @@ const PremiumCart = ({isPremium}:{isPremium:boolean}) => {
     
       };
   return (
-    <Card className=" bg-[#ebf5fb]  drop-shadow-xl ">
+    <div className=" bg-[#ebf5fb]  drop-shadow-xl "
+    style={{borderRadius:"10px"}}
+    >
         <div className="flex justify-between ">
           <div>
             
@@ -76,11 +78,13 @@ const PremiumCart = ({isPremium}:{isPremium:boolean}) => {
           </div>
         </div>
         <div className="w-full p-8" onClick={handelPremium}>
-          <button className="w-full flex justify-center items-center bg-[#b1cee0] drop-shadow-xl text-center rounded-md text-black font-semibold py-3 hover:bg-[#b1cee0a9] duration-300">
+          <button className="w-full flex justify-center items-center bg-blue-600 drop-shadow-xl text-center rounded-md text-white font-semibold py-3 hover:bg-blue-400 duration-300"
+          style={{borderRadius:"10px"}}
+          >
          {isPremium ? <div className="flex justify-center items-center" onClick={showPremium}> <Crown className="h-5 w-5 mr-1 " /> <span>Premium user</span></div > : <div className="flex justify-center items-center" ><StarsIcon className="mr-2 h-5 w-5" /> <span>Subscribe Now</span></div>}
           </button>
         </div>
-      </Card>
+      </div>
   )
 }
 

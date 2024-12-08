@@ -90,7 +90,8 @@ console.log(res);
                       <Button
                         variant={user?.isFollowing ? "secondary" : "default"}
                         size="sm"
-                        
+                        className="bg-blue-500 px-2 py-1 round"
+                        style={{borderRadius:"10px"}}
                       >
                         {user?.followers?.includes(_id) ? (
                           <span onClick={() =>handelUnFollow(user?._id)} className="flex justify-center items-center ">

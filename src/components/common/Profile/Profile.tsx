@@ -1,13 +1,16 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useUpdateUserInfoMutation } from "@/redux/api/features/auth/authApi";
 import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
-import PremiumCart from "@/components/sideSection/PremiumCart";
 import { updateProfileInfo } from "@/redux/api/features/usersSlice/usersSlice";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Award, ChefHat, ContactRound, UserRoundPen, Utensils } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface ProfileFormInputs {
   name: string;
@@ -75,7 +78,7 @@ export default function UserProfile() {
       const res = await updateUserInfo({ formData, _id });
       const updatedData = res?.data?.data;
       console.log(updatedData);
-      
+
       if (res?.data?.success && updatedData) {
         dispatch(updateProfileInfo({
           name: updatedData.name,
@@ -102,14 +105,90 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="w-full min-h-[100vh] ">
-      <div className="text-3xl font-semibold text-[] py-10 ">
-        user-dashboard/Profile Info
-      </div>
+    <div className="p-4 w-full">
+      <h4 className='font-semibold text-2xl flex justify-start items-start w-full mb-6'>user-dashboard/profile Info</h4>
+      <Tabs defaultValue="account" className=" w-full p-8  border-2 border-dashed">
+      <TabsList className="grid w-full grid-cols-2 mb-6 border border-gray-200">
+        <TabsTrigger
+          value="account"
+          className="flex justify-center items-center gap-2  data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:font-bold"
+        >
+          <div className="flex justify-center items-center gap-2">
+            <span><ContactRound className="size-4" /></span>
+            <span>Profile</span>
+          </div>
+        </TabsTrigger>
+        <TabsTrigger
+          value="password"
+          className="flex justify-center items-center gap-6 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:font-bold"
+        >
+
+          <div className="flex justify-center items-center gap-6">
+            <span><UserRoundPen className="size-4" /></span>
+            <span>Update Profile</span>
+          </div>
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="account" className="min-h-[70vh] ">
+
+        <Card className="w-full bg-[#d9eafa91] min-h-[70vh] mx-auto">
+          <CardHeader className="flex flex-col items-center space-y-4">
+            <Avatar className="w-32 h-32">
+              <AvatarImage src={image || undefined} alt={"person"} />
+
+            </Avatar>
+            <div className="text-center">
+              <CardTitle className="text-2xl font-bold">{name}</CardTitle>
+              <p className="text-muted-foreground">{"Passionate home cook and food blogger"}</p>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div>
+              <h3 className="font-semibold flex items-center mb-2">
+                <Utensils className="mr-2" size={18} />
+                Favorite Cuisines
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {["Italian", "Japanese", "Mexican", "Thai", "French"].map((cuisine) => (
+                  <Badge key={cuisine} variant="secondary">{cuisine}</Badge>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold flex items-center mb-2">
+                <ChefHat className="mr-2" size={18} />
+                Signature Dishes
+              </h3>
+              <ul className="list-disc list-inside">
+                {[
+                  "Homemade Pasta Carbonara",
+                  "Miso-Glazed Salmon",
+                  "Chocolate Lava Cake"
+                ].map((dish) => (
+                  <li key={dish}>{dish}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold flex items-center mb-2">
+                <Award className="mr-2" size={18} />
+                Bio
+              </h3>
+              <p className="text-muted-foreground">
+               {bio}
+               </p>
+            </div>
+          </CardContent>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="password" className="w-full">
+        <div className="w-full min-h-[100vh] ">
+
 
           <div className=" flex justify-center items-center">
-            <Card className="w-full flex justify-center items-center">
-              <CardContent className="space-y-2 w-[60%] ">
+            <Card className="w-full flex justify-center items-center bg-[#d9eafa91] ">
+              <CardContent className="space-y-2 w-full ">
                 <div className=" w-full mx-auto space-y-6 p-20">
                   <form
                     onSubmit={handleSubmit(onSubmit)}
@@ -137,7 +216,8 @@ export default function UserProfile() {
                         <button
                           type="button"
                           onClick={handleClick}
-                          className="bg-[#b4dffa] font-semibold text-black rounded-md px-4 py-2"
+                          className="bg-blue-500 text-white font-semibold rounded-md px-4 py-2"
+                          style={{ borderRadius: "10px" }}
                         >
                           Change Picture
                         </button>
@@ -160,7 +240,7 @@ export default function UserProfile() {
                           id="name"
                           defaultValue={name ?? ""}
                           {...register("name")}
-                          className="w-full px-3 py-2 border rounded"
+                          className="w-full px-3 py-2 border rounded bg-[#91ace723]"
                         />
                       </div>
                       <div className="space-y-2 mt-4">
@@ -174,13 +254,14 @@ export default function UserProfile() {
                           id="bio"
                           {...register("bio")}
                           defaultValue={bio ? bio : "update Your Boi"}
-                          className="w-full px-3 py-2 border rounded"
+                          className="w-full px-3 py-2 border rounded bg-[#91ace723]"
                         />
                       </div>
-                      <div className="mt-4">
+                      <div className="mt-4 ">
                         <button
                           type="submit"
-                          className="bg-[#b4dffa] font-semibold text-black rounded-md px-4 py-2"
+                          className="bg-blue-500 text-white font-semibold  rounded-md px-4 py-2"
+                          style={{ borderRadius: "10px" }}
                         >
                           {isLoading ? "Changing..." : "Save Changes"}
                         </button>
@@ -191,10 +272,14 @@ export default function UserProfile() {
                   <div className="flex flex-col justify-start items-start gap-2 w-1/2"></div>
                 </div>
               </CardContent>
-              <PremiumCart isPremium={false} />
+
             </Card>
           </div>
-    
+
+        </div>
+      </TabsContent>
+    </Tabs>
     </div>
   );
 }
+

@@ -6,7 +6,7 @@ import {
   useGivedislikeMutation,
   useGiveLikeMutation,
 } from "@/redux/api/features/recipe/recipe";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { Heart, ThumbsDown,  } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -16,13 +16,13 @@ interface VoteProps {
   initialDislikes: string[];
   initialcomments: string[];
 }
-const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VoteProps) => {
+const Vote = ({ recipeId, initialLikes, initialDislikes, initialcomments }: VoteProps) => {
   const [dislikeToggle] = useGivedislikeMutation();
   const [likeToggle] = useGiveLikeMutation();
   const { _id } = useAppSelector((state) => state.user);
-  const [like , setLike ] = useState(initialLikes)
-  const [disLike , setDislike ] = useState(initialDislikes)
- 
+  const [like, setLike] = useState(initialLikes)
+  const [disLike, setDislike] = useState(initialDislikes)
+
 
 
   const handelUpVot = async () => {
@@ -32,7 +32,7 @@ const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VotePr
     };
     const res = await likeToggle(recipeData);
     setLike(res?.data?.data?.likes)
-  
+
   };
   const handelDownVot = async () => {
     const recipeData = {
@@ -41,7 +41,7 @@ const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VotePr
     };
     const res = await dislikeToggle(recipeData);
     setDislike(res?.data?.data?.disLikes);
-    
+
   };
 
   return (
@@ -51,10 +51,10 @@ const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VotePr
           variant="outline"
           size="icon"
           aria-label="Upvote"
-          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(like.includes(_id || "")? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
+          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(like.includes(_id || "") ? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
           onClick={handelUpVot}
         >
-          <ThumbsUp className="h-4 w-4" />
+          <Heart className="h-4 w-4" />
           <span>{like?.length}</span>
         </Button>
 
@@ -82,7 +82,7 @@ const Vote = ({ recipeId, initialLikes, initialDislikes,initialcomments }:VotePr
           variant="outline"
           size="icon"
           aria-label="Downvote"
-          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(disLike.includes(_id || "")? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
+          className={`flex justify-center items-center gap-4 w-20 rounded-full ${(disLike.includes(_id || "") ? "border border-blue-400 text-blue-500 bg-blue-50" : "")}`}
           onClick={handelDownVot}
         >
           <ThumbsDown className="h-4 w-4" />

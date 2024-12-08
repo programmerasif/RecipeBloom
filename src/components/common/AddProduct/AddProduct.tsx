@@ -24,7 +24,9 @@ const AddProduct = () => {
       {_id && (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full bg-[#b1cee0] text-black rounded-md py-2 flex justify-center items-center space-x-2 hover:bg-[#b1cee0a9] duration-300">
+            <Button className="w-full bg-blue-600 text-white rounded-md py-2 flex justify-center items-center space-x-2 hover:bg-blue-400 duration-300"
+            style={{borderRadius:"10px"}}
+            >
               <PlusCircle className="h-5 w-5" />
               <span>Add New Recipe</span>
             </Button>

@@ -11,11 +11,11 @@ const Connection = () => {
          <div className='w-full border-dashed border-2 p-10 min-h-[70vh] flex justify-center items-center'>
          <Tabs defaultValue="followers" className="w-full">
       <TabsList className="grid w-full grid-cols-2 border">
-        <TabsTrigger value="followers" className='flex justify-center items-center gap-4'>
+        <TabsTrigger value="followers" className='flex justify-center items-center gap-4 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:font-bold'>
             <span><UserCheck className='size-4'/></span>
             <span>Followers</span>
         </TabsTrigger>
-        <TabsTrigger value="following" className='flex justify-center items-center gap-4'>
+        <TabsTrigger value="following" className='flex justify-center items-center gap-4 data-[state=active]:bg-blue-500 data-[state=active]:text-white data-[state=active]:font-bold'>
             <span>Following</span>
             <span><Rss className='size-4'/></span>
         </TabsTrigger>

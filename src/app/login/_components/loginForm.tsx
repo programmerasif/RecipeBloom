@@ -29,11 +29,11 @@ const userLoginSchema = z.object({
 });
 
 export default function LoginForm() {
-  const [login,{isLoading}] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
 
-  const [loginStatus,setLoginStatus] = useState(false)
- 
+  const [loginStatus, setLoginStatus] = useState(false)
+
 
   const form = useForm({
     resolver: zodResolver(userLoginSchema),
@@ -55,7 +55,7 @@ export default function LoginForm() {
       const res = await login(data);
       const user = res?.data?.data?.user;
       const token = res?.data?.data?.accessToken;
-  
+
       // Map the response to match the structure of UserState
       const newObj = {
         bio: user?.bio || "",
@@ -73,7 +73,7 @@ export default function LoginForm() {
         _id: user?._id || null,
         token: token || null, // Include the token here
       };
-  
+
       dispatch(setUserInfo(newObj));
       localStorage.setItem('activeUser', JSON.stringify(res?.data?.data?.user));
 
@@ -89,7 +89,7 @@ export default function LoginForm() {
         toast((error.data?.message as string) || "Something went wrong");
         if (error.data?.message == "Password Incorrect!") {
           setLoginStatus(true)
-          
+
         }
       }
 
@@ -98,11 +98,11 @@ export default function LoginForm() {
         toast("Login successful");
       }
     } catch (err) {
-      console.log(err,'96');
+      console.log(err, '96');
     }
   };
   const check = async () => {
-    
+
   };
 
   return (
@@ -121,7 +121,7 @@ export default function LoginForm() {
         Welcome to Recipe Bloom
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        we are committed to provide e testy food 
+        we are committed to provide e testy food
       </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="my-8">
@@ -145,7 +145,7 @@ export default function LoginForm() {
           </LabelInputContainer>
 
           <button
-            className="bg-[#b1cee0] hover:bg-[#86aec7] duration-300 text-black relative group/btn  block  w-full rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            className="bg-blue-600 hover:bg-[#86aec7] duration-300 text-black relative group/btn  block  w-full rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
             type="submit"
           >
             Login &rarr;
@@ -162,13 +162,13 @@ export default function LoginForm() {
       </div>
       {
         true && <div className="flex   justify-center pt-3  gap-2">
-        <p>Don&apos;t remember password </p>{" "}
-        <Link href={"/forget-password"}>
-          <p className="text-blue-500 font-bold hover:underline">Forget Password</p>{" "}
-        </Link>
-      </div>
+          <p>Don&apos;t remember password </p>{" "}
+          <Link href={"/forget-password"}>
+            <p className="text-blue-500 font-bold hover:underline">Forget Password</p>{" "}
+          </Link>
+        </div>
       }
-      
+
     </div>
   );
 }

@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 
 const PremiumMembershipPage = () => {
   const { data: userStatus } = useGetUsersStatusQuery(undefined);
-  const { _id, email, isPremium } = useAppSelector((state) => state.user); 
+  const { _id, email, isPremium } = useAppSelector((state) => state.user);
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -102,7 +102,7 @@ const PremiumMembershipPage = () => {
         </CardContent>
         <CardFooter>
           <Button
-            className="w-full bg-[#b1cee0] text-[#000000] hover:bg-[#b1cee0a9]"
+            className="w-full bg-blue-600 text-[#000000] hover:bg-[#b1cee0a9]"
             size="lg"
             onClick={handlePremium}
             disabled={isLoading}

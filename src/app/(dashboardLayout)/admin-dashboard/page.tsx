@@ -15,6 +15,7 @@ import DashboardInterface from "@/components/common/DashboardInterface";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { usePathname } from 'next/navigation';
+import { AlarmClockPlus, Combine, SquareKanban } from "lucide-react";
 
 // Define the SidebarLink component type to accept onClick
 type SidebarLinkProps = {
@@ -35,7 +36,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ link, onClick }) => {
     <a
       href={link.href}
       onClick={onClick} // Handle the click event
-      className="flex items-center p-2 text-sm font-medium text-neutral-700 hover:bg-neutral-200 rounded-md"
+      className="flex items-center p-2 text-sm font-medium text-gray-50 hover:bg-[#e1ebf746] rounded-md duration-300"
     >
       {link.icon}
       <span className="ml-3">{link.label}</span>
@@ -58,7 +59,7 @@ const AdminMainDashboard = () => {
       label: "Home",
       href: "/",
       icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconBrandTabler className="text-gray-50 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Home",
     },
@@ -66,7 +67,7 @@ const AdminMainDashboard = () => {
       label: "Profile",
       href: "#",
       icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconUserBolt className="text-gray-50 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Profile",
     },
@@ -74,7 +75,7 @@ const AdminMainDashboard = () => {
       label: "Manage User",
       href: "#",
       icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <SquareKanban className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "ManageUser",
     },
@@ -82,15 +83,24 @@ const AdminMainDashboard = () => {
       label: "Add New Recipe",
       href: "#",
       icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconUserBolt className="text-gray-50 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "AddNewRecipe",
+    },
+    {
+      label: "Connection",
+      href: "#",
+      icon: (
+        <Combine  className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+      component: "Connection",
     },
     {
       label: "Manage Recipe",
       href: "#",
       icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <SquareKanban className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        
       ),
       component: "ManageRecipe",
     },
@@ -98,7 +108,7 @@ const AdminMainDashboard = () => {
       label: "Update Password",
       href: "#",
       icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconSettings className="text-gray-50 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "UpdatePass",
     },
@@ -106,7 +116,7 @@ const AdminMainDashboard = () => {
       label: "Logout",
       href: "#",
       icon: (
-        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconArrowLeft className="text-gray-50 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
       component: "Logout",
     },
@@ -117,7 +127,7 @@ const AdminMainDashboard = () => {
   return (
     <div
       className={cn(
-        "rounded-md flex flex-col md:flex-row  dark:bg-neutral-800 w-full flex-1 max-w-full mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+        "rounded-md flex flex-col md:flex-row  dark:bg-neutral-800 w-full flex-1 max-w-full mx-auto  dark:border-neutral-700 overflow-hidden",
         "h-[100vh]" // for your use case, use `h-screen` instead of `h-[60vh]`
       )}
     >
@@ -131,7 +141,7 @@ const AdminMainDashboard = () => {
                   <SidebarLink
                     key={idx}
                     link={link}
-                    onClick={() => setActiveComponent(link.component!)} // Update active component on click
+                    onClick={() => setActiveComponent(link.component!)} 
                   />
                 ))}
               </div>

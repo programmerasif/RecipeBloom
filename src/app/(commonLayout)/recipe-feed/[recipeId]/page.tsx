@@ -53,7 +53,7 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
     pollingInterval: 1000,
   });
   const { register, handleSubmit, reset } = useForm<FormData>();
-  const { _id, name,email} = useAppSelector((state) => state.user);
+  const { _id, name, email } = useAppSelector((state) => state.user);
   const [updateComment, { isLoading: commentLoading }] =
     useUpdateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
@@ -296,63 +296,63 @@ function DetailRecipe({ params }: { params: { recipeId: string } }) {
         })}
         {
           email && <Card>
-          <CardContent className="p-4 flex justify-between items-center">
-            <form
-              className="space-y-4 w-[70%]"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <Textarea
-                placeholder="Add a comment..."
-                {...register("comment")}
-              />
-              {commenting ? (
-                <Button
-                  type="button"
-                  className="bg-[#b1cee0] text-gray-700 ..."
-                  disabled
-                >
-                  <svg
-                    className="animate-spin h-5 w-5 mr-3 ..."
-                    viewBox="0 0 24 24"
-                  ></svg>
-                  commenting...
-                </Button>
-              ) : (
-                <Button
-                  type="submit"
-                  className="bg-[#b1cee0] text-gray-700 hover:text-white"
-                >
-                  <Send className="w-4 h-4 mr-2" />
-                  Post Comment
-                </Button>
-              )}
-            </form>
-            <div>
-              <span>{rating} rating</span>
-              <ReactStars
-                count={5}
-                onChange={ratingChanged}
-                size={24}
-                isHalf={true}
-                activeColor="#ffd700"
-                color="#d3d3d3"
-              />
-              <button
-                onClick={handleSubmitRating}
-                className="bg-[#b1cee0] text-gray-700 font-semibold"
-                style={{
-                  marginTop: "10px",
-                  padding: "8px 16px",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
+            <CardContent className="p-4 flex justify-between items-center">
+              <form
+                className="space-y-4 w-[70%]"
+                onSubmit={handleSubmit(onSubmit)}
               >
-                Give Rating
-              </button>
-            </div>
-          </CardContent>
-        </Card>
+                <Textarea
+                  placeholder="Add a comment..."
+                  {...register("comment")}
+                />
+                {commenting ? (
+                  <Button
+                    type="button"
+                    className="bg-blue-600 text-gray-700 ..."
+                    disabled
+                  >
+                    <svg
+                      className="animate-spin h-5 w-5 mr-3 ..."
+                      viewBox="0 0 24 24"
+                    ></svg>
+                    commenting...
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="bg-blue-600 text-gray-700 hover:text-white"
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    Post Comment
+                  </Button>
+                )}
+              </form>
+              <div>
+                <span>{rating} rating</span>
+                <ReactStars
+                  count={5}
+                  onChange={ratingChanged}
+                  size={24}
+                  isHalf={true}
+                  activeColor="#ffd700"
+                  color="#d3d3d3"
+                />
+                <button
+                  onClick={handleSubmitRating}
+                  className="bg-blue-600 text-gray-700 font-semibold"
+                  style={{
+                    marginTop: "10px",
+                    padding: "8px 16px",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Give Rating
+                </button>
+              </div>
+            </CardContent>
+          </Card>
         }
       </div>
     </div>
